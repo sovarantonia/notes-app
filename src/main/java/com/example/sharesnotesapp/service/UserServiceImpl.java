@@ -15,11 +15,10 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Getter
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     //crud, getUser by id, by email

@@ -11,8 +11,6 @@ public interface UserService extends UserDetailsService {
     Optional<User> getUserById(Long id);
     void validateEmail(String email);
 
-    //Optional<User> getUserByEmail(String email);
-
     User saveUser(UserRequestDto userRequestDto);
 
     void deleteUserByEmail(String email);
