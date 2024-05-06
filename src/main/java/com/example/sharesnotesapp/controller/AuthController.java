@@ -36,13 +36,13 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<User> createAccount(@Valid @RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<User> createAccount(@Valid @RequestBody UserRequestDto userRequestDto) {
         URI uri = URI.create((ServletUriComponentsBuilder.fromCurrentContextPath().path("/register").toUriString()));
         return ResponseEntity.created(uri).body(userService.saveUser(userRequestDto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginJwtDto> login(@RequestBody UserLoginDto userLoginDto){
+    public ResponseEntity<UserLoginJwtDto> login(@RequestBody UserLoginDto userLoginDto) {
         try {
             Authentication authenticate = getAuthenticationManager()
                     .authenticate(

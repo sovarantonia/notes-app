@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        if (userRepository.findUserByEmail(email).isEmpty()) {
+            throw new UsernameNotFoundException(String.format("User with the address %s does not exist", email));
+        }
+
+        return userRepository.findUserByEmail(email);
     }
 
     /**
@@ -64,17 +74,35 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteUserByEmail(String email) {
-        if (userRepository.findUserByEmail(email).isEmpty()) {
-            throw new UsernameNotFoundException(String.format("User with the address %s does not exist", email));
+    public void deleteUser(Long id) {
+        if (userRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("User does not exist");
         }
-
-        userRepository.delete(userRepository.findUserByEmail(email).get());
+        userRepository.deleteById(id);
     }
 
     @Override
-    public void updateUserCredentials(UserRequestDto userRequestDto) {
+    public User updateUserCredentials(Long id, UserRequestDto userRequestDto) {
+        User userToUpdate = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
 
+        if (!(userRequestDto.getEmail().isEmpty() || userRequestDto.getEmail().isBlank())) {
+            userToUpdate.setEmail(userRequestDto.getEmail());
+        }
+
+        if (!(userRequestDto.getFirstName().isEmpty() || userRequestDto.getFirstName().isBlank())) {
+            userToUpdate.setFirstName(userRequestDto.getFirstName());
+        }
+
+        if (!(userRequestDto.getLastName().isEmpty() || userRequestDto.getLastName().isBlank())) {
+            userToUpdate.setLastName(userRequestDto.getLastName());
+        }
+
+        if (!(userRequestDto.getPassword().isEmpty() || userRequestDto.getPassword().isBlank())) {
+            userToUpdate.setPassword(userRequestDto.getPassword());
+        }
+
+        return userRepository.save(userToUpdate);
     }
 
 

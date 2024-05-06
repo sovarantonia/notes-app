@@ -9,7 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -24,13 +28,33 @@ public class UserController {
     @Autowired
     private final UserMapper mapper;
 
-
-   //get by id, update, maybe create
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id){
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id).orElseThrow(EntityNotFoundException::new);
         return ResponseEntity.ok(mapper.toDto(user));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponseDto> updateCredentials(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
+            User updatedUser = userService.updateUserCredentials(id, userRequestDto);
+            return ResponseEntity.ok(mapper.toDto(updatedUser));
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
+            userService.deleteUser(id);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
 }
