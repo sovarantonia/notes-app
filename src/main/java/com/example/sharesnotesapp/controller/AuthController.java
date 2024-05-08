@@ -5,7 +5,7 @@ import com.example.sharesnotesapp.model.dto.request.UserLoginDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import com.example.sharesnotesapp.model.dto.response.UserLoginJwtDto;
 import com.example.sharesnotesapp.security.jwt.JwtUtils;
-import com.example.sharesnotesapp.service.UserService;
+import com.example.sharesnotesapp.service.user.UserService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

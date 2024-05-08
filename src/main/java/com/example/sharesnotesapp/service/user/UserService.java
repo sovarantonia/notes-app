@@ -1,4 +1,4 @@
-package com.example.sharesnotesapp.service;
+package com.example.sharesnotesapp.service.user;
 
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
