@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -72,5 +73,10 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Optional<Note> getNoteById(Long id) {
         return noteRepository.findById(id);
+    }
+
+    @Override
+    public ArrayList<Note> getNotesByUser(User user) {
+        return noteRepository.getNotesByUserOrderByDateDesc(user);
     }
 }
