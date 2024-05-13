@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -76,7 +77,16 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public ArrayList<Note> getNotesByUser(User user) {
+    public List<Note> getNotesByUser(User user) {
         return noteRepository.getNotesByUserOrderByDateDesc(user);
+    }
+
+    @Override
+    public List<Note> getFilteredNotesByTitle(User user, String string) {
+        if (!string.isEmpty() || !string.isBlank()){
+             return noteRepository.findAllByUserAndTitleContainsIgnoreCaseOrderByDateDesc(user, string);
+        }
+
+        return getNotesByUser(user);
     }
 }

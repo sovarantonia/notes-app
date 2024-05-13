@@ -4,7 +4,8 @@ import com.example.sharesnotesapp.model.Note;
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
 
-import java.util.ArrayList;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface NoteService {
@@ -15,5 +16,7 @@ public interface NoteService {
     Note updateNote(Long id, NoteRequestDto noteRequestDto);
     Optional<Note> getNoteById(Long id);
 
-    ArrayList<Note> getNotesByUser(User user);
+    List<Note> getNotesByUser(User user);
+
+    List<Note> getFilteredNotesByTitle(User user, String string);
 }
