@@ -1,11 +1,11 @@
-package com.example.sharesnotesapp.service;
+package com.example.sharesnotesapp.service.user;
 
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import com.example.sharesnotesapp.repository.UserRepository;
+import com.example.sharesnotesapp.service.user.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,8 +21,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-
-    //crud, getUser by id, by email
 
     @Override
     public Optional<User> getUserById(Long id) {
