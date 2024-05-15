@@ -1,16 +1,23 @@
 package com.example.sharesnotesapp.service.note;
 
+import com.example.sharesnotesapp.model.FileType;
 import com.example.sharesnotesapp.model.Note;
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
+import com.example.sharesnotesapp.model.dto.response.NoteResponseDto;
 import com.example.sharesnotesapp.repository.NoteRepository;
 import com.example.sharesnotesapp.repository.UserRepository;
-import lombok.AllArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
+
+
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,10 +90,35 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> getFilteredNotesByTitle(User user, String string) {
-        if (!string.isEmpty() || !string.isBlank()){
-             return noteRepository.findAllByUserAndTitleContainsIgnoreCaseOrderByDateDesc(user, string);
+        if (!string.isEmpty() || !string.isBlank()) {
+            return noteRepository.findAllByUserAndTitleContainsIgnoreCaseOrderByDateDesc(user, string);
         }
 
         return getNotesByUser(user);
+    }
+
+    @Override
+    public HttpHeaders downloadNote(Note note, FileType type) {
+        HttpHeaders headers = new HttpHeaders();
+
+        if (type.equals(FileType.text)) {
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            headers.setContentDispositionFormData("filename", "note_" + note.getTitle()
+                    + "_" + note.getDate().toString() + ".txt");
+            headers.setContentLength(createFileContent(note).getBytes().length);
+
+            return headers;
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public String createFileContent(Note note) {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        return "Title: " + note.getTitle() + " " + format.format(note.getDate()) + "\n\n" +
+                "Content: " + "\n" + note.getText() + "\n\n" +
+                "Grade: " + note.getGrade();
     }
 }

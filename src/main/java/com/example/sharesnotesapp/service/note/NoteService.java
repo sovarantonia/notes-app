@@ -1,8 +1,10 @@
 package com.example.sharesnotesapp.service.note;
 
+import com.example.sharesnotesapp.model.FileType;
 import com.example.sharesnotesapp.model.Note;
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
+import org.springframework.http.HttpHeaders;
 
 
 import java.util.List;
@@ -19,4 +21,8 @@ public interface NoteService {
     List<Note> getNotesByUser(User user);
 
     List<Note> getFilteredNotesByTitle(User user, String string);
+
+    HttpHeaders downloadNote(Note note, FileType type);
+
+    String createFileContent(Note note);
 }
