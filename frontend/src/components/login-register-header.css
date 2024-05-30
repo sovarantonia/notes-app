@@ -1,0 +1,98 @@
+.headerContainer {
+    width: 100%;
+    position: fixed;
+    top: 20px;
+    left: 0;
+    z-index: 1000; /* Ensure the header is above other content */
+    background: #D8698E;
+
+}
+
+.headerContainer .MuiAppBar-root {
+    background: #D8698E;
+}
+
+.headerContainer .MuiToolbar-root {
+    display: flex;
+    justify-content: space-between;
+    background: #D8698E;
+}
+
+.headerContainer .MuiTypography-root {
+    flex-grow: 1;
+    text-align: center;
+    font-family: "Papyrus";
+    font-size: 30px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row; /* Align items horizontally */
+    align-items: flex-start; /* Align items at the start of the cross axis */
+    margin-top: 2px; /* Adjust to leave space for the fixed header */
+    padding: 20px;
+}
+
+.container img {
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.container h2{
+    font-family: "Papyrus";
+    font-size: 30px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 90px;
+    margin-left: 90px;
+    max-width: 400px;
+    margin-top: 50px;
+    margin-right: auto; /* Push the form to the left */
+    border: 2px solid #7d3e53; /* Set border with the shade of pink */
+    border-radius: 10px; /* Add border-radius for rounded corners */
+}
+
+.form input {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+.form button {
+    padding: 10px;
+    background-color: #D8698E;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+.form button:hover {
+    background-color: #D8698E;
+}
+
+.form button[type="submit"] {
+    background-color: #D3D3D3; /* Green */
+}
+
+.form button[type="submit"]:hover {
+    background-color: #218838; /* Darker Green */
+}
+
+.form a {
+    text-decoration: underline;
+    color: #D8698E; /* Pink */
+}
+
+.form a:hover {
+    color: #7d3e53; /* Darker Pink */
+}

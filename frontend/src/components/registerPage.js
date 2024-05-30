@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import Header from "./header";
 import {register} from "./api";
-import {redirect} from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import './login-register-header.css';
+import sign_up from '../resources/sign_up.svg';
 const RegisterPage = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -10,7 +11,7 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    //const history = History.();
+    const history = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,11 +28,15 @@ const RegisterPage = () => {
             return;
         }
 
+        if(!firstName || !lastName || !email || !password || !confirmPassword){
+            setError('All fields are required')
+        }
+
         try {
             await register(firstName, lastName, email, password);
             // Registration successful, display notification and redirect to login page
             alert('Registration successful! Please login with your credentials.');
-            redirect('/login'); // Redirect to the login page
+            history('/login');
         } catch (error) {
             setError(error);
         }
@@ -43,11 +48,10 @@ const RegisterPage = () => {
     };
 
     return (
-        <div>
+        <div className={"container"}>
             <Header/>
-            <h2>Register</h2>
-            {error && <div>{error}</div>}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={"form"}>
+                <h2>Register</h2>
                 <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
                        placeholder="First Name" required/>
                 <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}
@@ -59,7 +63,9 @@ const RegisterPage = () => {
                 <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
                        placeholder="Confirm Password" required/>
                 <button type="submit">Register</button>
+                <a onClick={() => window.location.href='/login'}>Already have an account? Login here</a>
             </form>
+            <img src={sign_up}/>
         </div>
     );
 }
