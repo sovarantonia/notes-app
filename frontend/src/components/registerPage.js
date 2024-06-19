@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import Header from "./header";
 import {register} from "./api";
 import { useNavigate } from 'react-router-dom';
-import './login-register-header.css';
+import './register-page.css';
+import './header.css';
 import sign_up from '../resources/sign_up.svg';
 const RegisterPage = () => {
     const [firstName, setFirstName] = useState('');

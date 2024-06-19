@@ -1,36 +1,9 @@
-.headerContainer {
-    width: 100%;
-    position: fixed;
-    top: 20px;
-    left: 0;
-    z-index: 1000; /* Ensure the header is above other content */
-    background: #D8698E;
-
-}
-
-.headerContainer .MuiAppBar-root {
-    background: #D8698E;
-}
-
-.headerContainer .MuiToolbar-root {
-    display: flex;
-    justify-content: space-between;
-    background: #D8698E;
-}
-
-.headerContainer .MuiTypography-root {
-    flex-grow: 1;
-    text-align: center;
-    font-family: "Papyrus";
-    font-size: 30px;
-}
-
 .container {
     display: flex;
     flex-direction: row; /* Align items horizontally */
     align-items: flex-start; /* Align items at the start of the cross axis */
-    margin-top: 2px; /* Adjust to leave space for the fixed header */
-    padding: 20px;
+    margin-top: 5px; /* Adjust to leave space for the fixed header */
+    padding: 40px;
 }
 
 .container img {
@@ -52,7 +25,7 @@
     padding: 90px;
     margin-left: 90px;
     max-width: 400px;
-    margin-top: 50px;
+    margin-top: 100px;
     margin-right: auto; /* Push the form to the left */
     border: 2px solid #7d3e53; /* Set border with the shade of pink */
     border-radius: 10px; /* Add border-radius for rounded corners */

@@ -1,0 +1,26 @@
+.headerContainer {
+    width: 100%;
+    position: fixed;
+    top: 10px;
+    left: 0;
+    z-index: 1000; /* Ensure the header is above other content */
+    background: #D8698E;
+
+}
+
+.headerContainer .MuiAppBar-root {
+    background: #D8698E;
+}
+
+.headerContainer .MuiToolbar-root {
+    display: flex;
+    justify-content: space-between;
+    background: #D8698E;
+}
+
+.headerContainer .MuiTypography-root {
+    flex-grow: 1;
+    text-align: center;
+    font-family: "Papyrus";
+    font-size: 30px;
+}

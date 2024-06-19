@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { login } from './api';
 import { useNavigate } from 'react-router-dom';
-import './login-register-header.css';
+import './login-page.css';
+import './header.css'
 import login_image from "../resources/login.svg";
 import Header from './header';
 const LoginPage = () => {
@@ -30,8 +31,8 @@ const LoginPage = () => {
     return (
         <div className={"container"}>
             <Header/>
-            <h2>Login</h2>
             <form onSubmit={handleSubmit} className={"form"}>
+                <h2>Login</h2>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
                 <button type="submit">Login</button>
