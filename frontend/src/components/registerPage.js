@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import Header from "./header";
 import {register} from "./api";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import './register-page.css';
 import './header.css';
 import sign_up from '../resources/sign_up.svg';
+
 const RegisterPage = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -29,8 +30,9 @@ const RegisterPage = () => {
             return;
         }
 
-        if(!firstName || !lastName || !email || !password || !confirmPassword){
+        if (!firstName || !lastName || !email || !password || !confirmPassword) {
             setError('All fields are required')
+            return;
         }
 
         try {
@@ -39,9 +41,25 @@ const RegisterPage = () => {
             alert('Registration successful! Please login with your credentials.');
             history('/login');
         } catch (error) {
-            setError(error);
+            setError(error || "Registration failed");
         }
     };
+
+    const handleBlur = (field) => {
+        if (field === 'email' && !validateEmail(email) && email.length !== 0) {
+            setError('Invalid email format');
+            return;
+        }
+        if (field === 'password' && password.length < 6 && password.length !== 0) {
+            setError('Password must be at least 6 characters long');
+            return;
+        }
+        if (field === 'confirmPassword' && password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+        setError('');
+    }
 
     const validateEmail = (email) => {
         // Basic email format validation
@@ -49,24 +67,90 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className={"container"}>
+        <div className="container">
             <Header/>
-            <form onSubmit={handleSubmit} className={"form"}>
+            <form onSubmit={handleSubmit} className="form">
+                {error && <div className="error">{error}</div>}
                 <h2>Register</h2>
-                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
-                       placeholder="First Name" required/>
-                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}
-                       placeholder="Last Name" required/>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"
-                       required/>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                       placeholder="Password" required/>
-                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
-                       placeholder="Confirm Password" required/>
+                <div className="form-group">
+                    <label htmlFor="firstName">First Name:</label>
+                    <input
+                        type="text"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => {
+                            setFirstName(e.target.value);
+                            setError('');
+                        }}
+                        onBlur={() => handleBlur('firstName')}
+                        placeholder="First name"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="lastName">Last Name:</label>
+                    <input
+                        type="text"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => {
+                            setLastName(e.target.value);
+                            setError('');
+                        }}
+                        onBlur={() => handleBlur('lastName')}
+                        placeholder="Last name"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            setError('');
+                        }}
+                        onBlur={() => handleBlur('email')}
+                        placeholder="Email"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            setError('');
+                        }}
+                        onBlur={() => handleBlur('password')}
+                        placeholder="Password"
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="confirmPassword">Confirm Password:</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            setError('');
+                        }}
+                        onBlur={() => handleBlur('confirmPassword')}
+                        placeholder="Confirm password"
+                        required
+                    />
+                </div>
                 <button type="submit">Register</button>
-                <a onClick={() => window.location.href='/login'}>Already have an account? Login here</a>
+                <a onClick={() => window.location.href = '/login'}>Already have an account? Login here</a>
             </form>
-            <img src={sign_up}/>
+            <img src={sign_up} alt="Sign Up" className="signup-image"/>
         </div>
     );
 }

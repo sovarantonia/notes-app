@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { login } from './api';
-import { useNavigate } from 'react-router-dom';
 import './login-page.css';
 import './header.css'
 import login_image from "../resources/login.svg";
@@ -32,6 +31,7 @@ const LoginPage = () => {
         <div className={"container"}>
             <Header/>
             <form onSubmit={handleSubmit} className={"form"}>
+                {error && <div className="error">{error}</div>}
                 <h2>Login</h2>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
