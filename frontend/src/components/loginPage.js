@@ -4,28 +4,28 @@ import './login-page.css';
 import './header.css'
 import login_image from "../resources/login.svg";
 import Header from './header';
-const LoginPage = () => {
+import {useNavigate} from "react-router-dom";
+
+const LoginPage = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [loggedIn, setLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!email || !password){
-            setError('Enter the credentials')
+        if (!email || !password) {
+            setError('Enter the credentials');
+            return;
         }
+
         try {
-            await login(email, password);
-            setLoggedIn(true);
+            await onLogin(email, password);
+            navigate("/home");
         } catch (error) {
             setError('Login failed. Please check your credentials.');
         }
     };
-
-    if (loggedIn) {
-        alert("Successful login");
-    }
 
     return (
         <div className={"container"}>

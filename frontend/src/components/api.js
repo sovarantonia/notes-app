@@ -7,8 +7,9 @@ export const login = async (email, password) => {
         const response = await axios.post(`${API_URL}/login`, {email, password});
         return response.data;
     } catch (error) {
-        throw error.response.data.message;
-    }
+            throw new Error('Login failed');
+        }
+
 };
 
 export const register = async (firstName, lastName, email, password) => {
@@ -16,7 +17,13 @@ export const register = async (firstName, lastName, email, password) => {
         const response = await axios.post(`${API_URL}/register`, {firstName, lastName, email, password});
         return response.data;
     } catch (error) {
-        throw error.response.data.message;
-
+        console.error('Error response:', error); // Log the entire error object
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Registration failed');
+        }
     }
 };
+
+

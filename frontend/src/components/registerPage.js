@@ -17,6 +17,7 @@ const RegisterPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
         if (password !== confirmPassword) {
             setError('Passwords do not match');
             return;
@@ -41,7 +42,8 @@ const RegisterPage = () => {
             alert('Registration successful! Please login with your credentials.');
             history('/login');
         } catch (error) {
-            setError(error || "Registration failed");
+            console.log(error.message);
+            setError(JSON.parse(error.message));
         }
     };
 
