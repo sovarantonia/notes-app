@@ -54,7 +54,7 @@
 }
 
 .form button[type="submit"] {
-    background-color: #D3D3D3; /* Green */
+    background-color: #D3D3D3;
 }
 
 .form button[type="submit"]:hover {

@@ -69,3 +69,28 @@
 .form a:hover {
     color: #7d3e53; /* Darker Pink */
 }
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.form-group label{
+    width: 110px; /* Adjust as needed */
+    margin-right: 7px;
+    margin-bottom: 10px;
+}
+
+.form-group input {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
