@@ -7,6 +7,7 @@ import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
 import org.springframework.http.HttpHeaders;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +26,6 @@ public interface NoteService {
     HttpHeaders downloadNote(Note note, FileType type);
 
     String createFileContent(Note note);
+
+    String formatDate(Date date);
 }

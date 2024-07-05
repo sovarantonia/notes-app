@@ -9,6 +9,7 @@ import com.example.sharesnotesapp.repository.NoteRepository;
 import com.example.sharesnotesapp.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -100,11 +102,11 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public HttpHeaders downloadNote(Note note, FileType type) {
         HttpHeaders headers = new HttpHeaders();
+        String filename = "note_" + note.getTitle() + "_" + formatDate(note.getDate()) + ".txt";
 
         if (type.equals(FileType.text)) {
             headers.setContentType(MediaType.TEXT_PLAIN);
-            headers.setContentDispositionFormData("filename", "note_" + note.getTitle()
-                    + "_" + note.getDate().toString() + ".txt");
+            headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
             headers.setContentLength(createFileContent(note).getBytes().length);
 
             return headers;
@@ -116,9 +118,15 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public String createFileContent(Note note) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        return "Title: " + note.getTitle() + " " + format.format(note.getDate()) + "\n\n" +
+        return "Title: " + note.getTitle() + " " + formatDate(note.getDate()) + "\n\n" +
                 "Content: " + "\n" + note.getText() + "\n\n" +
                 "Grade: " + note.getGrade();
+    }
+
+    @Override
+    public String formatDate(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+
+        return format.format(date);
     }
 }
