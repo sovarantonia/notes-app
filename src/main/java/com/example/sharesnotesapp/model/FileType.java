@@ -1,7 +1,7 @@
 package com.example.sharesnotesapp.model;
 
 public enum FileType {
-    text,
+    txt,
     pdf,
-    document
+    docx
 }

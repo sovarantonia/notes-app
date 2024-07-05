@@ -9,7 +9,6 @@ import com.example.sharesnotesapp.model.dto.response.NoteResponseDto;
 import com.example.sharesnotesapp.service.note.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.util.List;
-
 
 
 @RestController
@@ -104,14 +102,27 @@ public class NoteController {
     }
 
     @GetMapping("/{id}/download")
-    public ResponseEntity<byte[]> downloadNote(@PathVariable Long id, @RequestParam String type){
+    public ResponseEntity<byte[]> downloadNote(@PathVariable Long id, @RequestParam String type) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User){
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
             Note note = noteService.getNoteById(id).orElseThrow(EntityNotFoundException::new);
+            byte[] fileContent = new byte[0];
+
+            if (FileType.valueOf(type).equals(FileType.txt)) {
+                fileContent = noteService.createTextFileContent(note).getBytes();
+            }
+
+            else if(FileType.valueOf(type).equals(FileType.pdf)){
+                fileContent = noteService.createPdfContent(note);
+            }
+
+            else if(FileType.valueOf(type).equals(FileType.docx)){
+                fileContent = noteService.createDocxContent(note);
+            }
 
             return ResponseEntity.ok()
                     .headers(noteService.downloadNote(note, FileType.valueOf(type)))
-                    .body(noteService.createFileContent(note).getBytes());
+                    .body(fileContent);
 
         }
 

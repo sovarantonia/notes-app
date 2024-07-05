@@ -25,7 +25,11 @@ public interface NoteService {
 
     HttpHeaders downloadNote(Note note, FileType type);
 
-    String createFileContent(Note note);
+    String createTextFileContent(Note note);
 
     String formatDate(Date date);
+
+    byte[] createPdfContent(Note note);
+
+    byte[] createDocxContent(Note note);
 }
