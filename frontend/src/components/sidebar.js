@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './sidebar.css';
+import '../resources/sidebar.css';
 
 const Sidebar = ({ onLogout }) => {
     return (

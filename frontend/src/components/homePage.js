@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "./sidebar";
-import './homepage.css';
+import '../resources/homepage.css';
 const HomePage = ({ onLogout }) => {
     return (
         <div className="home-page">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { login } from './api';
-import './login-page.css';
-import './header.css'
+import '../resources/login-page.css';
+import '../resources/header.css'
 import login_image from "../resources/login.svg";
 import Header from './header';
 import {useNavigate} from "react-router-dom";
