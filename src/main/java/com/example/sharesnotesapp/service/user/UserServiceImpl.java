@@ -24,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserById(Long id) {
+        if(userRepository.findById(id).isEmpty()){
+            throw new EntityNotFoundException(String.format("User with id %s does not exist", id));
+        }
         return userRepository.findById(id);
     }
 
@@ -85,6 +88,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
 
         if (!(userRequestDto.getEmail().isEmpty() || userRequestDto.getEmail().isBlank())) {
+            validateEmail(userRequestDto.getEmail());
             userToUpdate.setEmail(userRequestDto.getEmail());
         }
 
