@@ -1,6 +1,7 @@
 package com.example.sharesnotesapp.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -12,11 +13,11 @@ import java.util.Date;
 public class NoteRequestDto {
     private Long userId;
     @NotBlank
-    private String title;
-    private String text;
+    private String title = "";
+    private String text = "";
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date date;
-    @Min(value = 0, message = "Values must be between 0 and 10")
-    @Max(value = 10, message = "Values must be between 0 and 10")
-    private String grade = "0";
+    @Min(value = 1, message = "Values must be between 1 and 10")
+    @Max(value = 10, message = "Values must be between 1 and 10")
+    private Integer grade = 0;
 }

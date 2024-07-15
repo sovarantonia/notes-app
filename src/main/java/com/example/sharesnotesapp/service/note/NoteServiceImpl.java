@@ -38,17 +38,19 @@ public class NoteServiceImpl implements NoteService {
     private final UserRepository userRepository;
 
     @Override
-    public Note saveNote(Long id, NoteRequestDto noteRequestDto) {
-        User associatedUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-        if (!noteRequestDto.getGrade().matches("^(10|[0-9])$")) {
-            throw new IllegalArgumentException("Invalid grade, must be an integer between 0 and 10");
+    public Note saveNote(Long userId, NoteRequestDto noteRequestDto) {
+        User associatedUser = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+
+        if(noteRequestDto.getGrade() == null){
+            throw new IllegalArgumentException("Grade must be an integer between 1 and 10");
         }
+
         Note createdNote = Note.builder()
                 .user(associatedUser)
                 .title(noteRequestDto.getTitle())
                 .text(noteRequestDto.getText())
                 .date(noteRequestDto.getDate())
-                .grade(Integer.parseInt(noteRequestDto.getGrade()))
+                .grade(noteRequestDto.getGrade())
                 .build();
 
         return noteRepository.save(createdNote);
@@ -76,19 +78,19 @@ public class NoteServiceImpl implements NoteService {
             updatedNote.setText(noteRequestDto.getText());
         }
 
-        if (!(noteRequestDto.getGrade().isBlank() || noteRequestDto.getGrade().isEmpty())) {
-            if (noteRequestDto.getGrade().matches("^(10|[0-9])$")) {
-                updatedNote.setGrade(Integer.parseInt(noteRequestDto.getGrade()));
-            } else {
-                throw new IllegalArgumentException("Invalid grade, must be an integer between 0 and 10");
-            }
+        if (noteRequestDto.getGrade() != 0) {
+            updatedNote.setGrade(noteRequestDto.getGrade());
         }
 
         return noteRepository.save(updatedNote);
     }
 
+
     @Override
     public Optional<Note> getNoteById(Long id) {
+        if (noteRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException(String.format("Note with id %s does not exist", id));
+        }
         return noteRepository.findById(id);
     }
 
@@ -99,11 +101,11 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> getFilteredNotesByTitle(User user, String string) {
-        if (!string.isEmpty() || !string.isBlank()) {
+        if (!string.isEmpty() && !string.isBlank()) {
             return noteRepository.findAllByUserAndTitleContainsIgnoreCaseOrderByDateDesc(user, string);
         }
 
-        return getNotesByUser(user);
+        return noteRepository.getNotesByUserOrderByDateDesc(user);
     }
 
     @Override

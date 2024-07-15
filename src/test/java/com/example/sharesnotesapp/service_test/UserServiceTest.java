@@ -22,27 +22,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserServiceTest {
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
+
+    private User user;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
 
-    @Test
-    void testSaveUser() {
-        User user = new User();
+        user = new User();
         user.setFirstName("ExampleA");
         user.setLastName("ExampleB");
         user.setEmail("test_example@test.com");
         user.setPassword(passwordEncoder.encode("test123"));
+    }
 
+    @Test
+    void testSaveUser() {
         UserRequestDto userDto = new UserRequestDto();
         userDto.setFirstName("ExampleA");
         userDto.setLastName("ExampleB");
@@ -91,13 +93,6 @@ class UserServiceTest {
 
     @Test
     void testGetUserById(){
-        User user = new User();
-        user.setId(1L);
-        user.setFirstName("ExampleA");
-        user.setLastName("ExampleB");
-        user.setEmail("test_example@test.com");
-        user.setPassword(passwordEncoder.encode("test123"));
-
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         User foundUser = userService.getUserById(1L).orElseThrow(null);
@@ -123,13 +118,6 @@ class UserServiceTest {
 
     @Test
     void testGetUserByEmail(){
-        User user = new User();
-        user.setId(1L);
-        user.setFirstName("ExampleA");
-        user.setLastName("ExampleB");
-        user.setEmail("test_example@test.com");
-        user.setPassword(passwordEncoder.encode("test123"));
-
         String email = "test_example@test.com";
 
         when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(user));
@@ -183,12 +171,6 @@ class UserServiceTest {
     @Test
     void testDeleteUser(){
         Long id = 1L;
-        User user = new User();
-        user.setId(id);
-        user.setFirstName("ExampleA");
-        user.setLastName("ExampleB");
-        user.setEmail("test_example@test.com");
-        user.setPassword(passwordEncoder.encode("test123"));
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
@@ -213,19 +195,11 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserCredentials(){
-        User user = new User();
-        Long id = 1L;
-        user.setId(id);
-        user.setFirstName("ExampleA");
-        user.setLastName("ExampleB");
-        user.setEmail("test_example@test.com");
-        user.setPassword(passwordEncoder.encode("test123"));
-
-        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         UserRequestDto userRequestDto = new UserRequestDto();
         userRequestDto.setFirstName("New-Name");
-        userService.updateUserCredentials(id, userRequestDto);
+        userService.updateUserCredentials(1L, userRequestDto);
 
         assertEquals(userRequestDto.getFirstName(), user.getFirstName());
         assertEquals("ExampleB", user.getLastName());
@@ -235,14 +209,9 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserCredential_InvalidEmail(){
-        User user = new User();
         String existingEmail = "existing_email@test.com";
         Long id = 1L;
-        user.setId(id);
-        user.setFirstName("ExampleA");
-        user.setLastName("ExampleB");
         user.setEmail(existingEmail);
-        user.setPassword(passwordEncoder.encode("test123"));
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
         when(userRepository.findUserByEmail(existingEmail)).thenReturn(Optional.of(user));
@@ -276,23 +245,15 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserCredential_AllEmptyFields(){
-        User user = new User();
-        Long id = 1L;
-        user.setId(id);
-        user.setFirstName("ExampleA");
-        user.setLastName("ExampleB");
-        user.setEmail("email@email.com");
-        user.setPassword(passwordEncoder.encode("test123"));
-
-        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         UserRequestDto userRequestDto = new UserRequestDto();
 
-        userService.updateUserCredentials(id, userRequestDto);
+        userService.updateUserCredentials(1L, userRequestDto);
 
         assertEquals("ExampleA", user.getFirstName());
         assertEquals("ExampleB", user.getLastName());
-        assertEquals("email@email.com", user.getEmail());
+        assertEquals("test_example@test.com", user.getEmail());
         assertEquals(passwordEncoder.encode("test123"), user.getPassword());
     }
 
