@@ -70,11 +70,11 @@ public class NoteServiceImpl implements NoteService {
 
         Note updatedNote = noteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Note does not exist"));
 
-        if (!(noteRequestDto.getTitle().isBlank() || noteRequestDto.getTitle().isEmpty())) {
+        if (!noteRequestDto.getTitle().isBlank() && !noteRequestDto.getTitle().isEmpty()) {
             updatedNote.setTitle(noteRequestDto.getTitle());
         }
 
-        if (!(noteRequestDto.getText().isBlank() || noteRequestDto.getText().isEmpty())) {
+        if (!noteRequestDto.getText().isBlank() && !noteRequestDto.getText().isEmpty()) {
             updatedNote.setText(noteRequestDto.getText());
         }
 
@@ -111,7 +111,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public HttpHeaders downloadNote(Note note, FileType type) {
         HttpHeaders headers = new HttpHeaders();
-        String filename = "note_" + note.getTitle() + "_" + formatDate(note.getDate()) + ".";
+        String filename = "note_" + note.getTitle() + "_" + note.getDate() + ".";
 
         if (type.equals(FileType.txt)) {
             headers.setContentType(MediaType.TEXT_PLAIN);
@@ -144,7 +144,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public String createTextFileContent(Note note) {
-        return "Title: " + note.getTitle() + " " + formatDate(note.getDate()) + "\n\n" +
+        return "Title: " + note.getTitle() + " " + note.getDate() + "\n\n" +
                 "Content: " + "\n" + note.getText() + "\n\n" +
                 "Grade: " + note.getGrade();
     }
@@ -157,7 +157,7 @@ public class NoteServiceImpl implements NoteService {
         Document document = new Document(pdfDoc);
 
         document.add(new Paragraph("Title: " + note.getTitle()));
-        document.add(new Paragraph("Date: " + formatDate(note.getDate())));
+        document.add(new Paragraph("Date: " + note.getDate()));
         document.add(new Paragraph("Content:"));
         document.add(new Paragraph(note.getText()));
         document.add(new Paragraph("Grade: " + note.getGrade()));
@@ -180,7 +180,7 @@ public class NoteServiceImpl implements NoteService {
             // Create a date paragraph
             XWPFParagraph dateParagraph = document.createParagraph();
             XWPFRun dateRun = dateParagraph.createRun();
-            dateRun.setText("Date: " + formatDate(note.getDate()));
+            dateRun.setText("Date: " + note.getDate());
             dateRun.addBreak();
 
             // Create a content paragraph
@@ -203,12 +203,5 @@ public class NoteServiceImpl implements NoteService {
         } catch (IOException e) {
             throw new RuntimeException("Error while creating DOCX content", e);
         }
-    }
-
-    @Override
-    public String formatDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-
-        return format.format(date);
     }
 }

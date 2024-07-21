@@ -7,8 +7,8 @@ import com.example.sharesnotesapp.model.dto.mapper.NoteMapper;
 import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
 import com.example.sharesnotesapp.model.dto.response.NoteResponseDto;
 import com.example.sharesnotesapp.service.note.NoteService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,18 +16,22 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/notes")
 public class NoteController {
-    @Autowired
     private final NoteService noteService;
-    @Autowired
     private final NoteMapper mapper;
+
+    @Autowired
+    public NoteController(NoteService noteService, NoteMapper mapper) {
+        this.noteService = noteService;
+        this.mapper = mapper;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<NoteResponseDto> getNoteById(@PathVariable Long id) {
@@ -42,7 +46,7 @@ public class NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<NoteResponseDto> createNote(@RequestBody NoteRequestDto noteRequestDto) {
+    public ResponseEntity<NoteResponseDto> createNote(@RequestBody @Valid NoteRequestDto noteRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user) {
             URI uri = URI.create((ServletUriComponentsBuilder.fromCurrentContextPath().path("/notes").toUriString()));
@@ -57,16 +61,16 @@ public class NoteController {
     public ResponseEntity<String> deleteNote(@PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
-            noteService.deleteNote(id);
+                noteService.deleteNote(id);
 
-            return ResponseEntity.ok().body("Note was deleted");
-        }
+                return ResponseEntity.ok().build();
+            }
 
-        return ResponseEntity.badRequest().body("Wrong authentication type");
+        return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<NoteResponseDto> updateNote(@PathVariable Long id, @RequestBody NoteRequestDto noteRequestDto) {
+    public ResponseEntity<NoteResponseDto> updateNote(@PathVariable Long id, @RequestBody @Valid NoteRequestDto noteRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
             Note updatedNote = noteService.updateNote(id, noteRequestDto);
@@ -83,7 +87,7 @@ public class NoteController {
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user) {
             List<Note> notes = noteService.getNotesByUser(user);
 
-            return ResponseEntity.ok(notes.stream().map(note -> mapper.toDto(note)).toList());
+            return ResponseEntity.ok(notes.stream().map(mapper::toDto).toList());
         }
 
         return ResponseEntity.badRequest().build();
@@ -95,7 +99,7 @@ public class NoteController {
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user) {
             List<Note> filteredNotes = noteService.getFilteredNotesByTitle(user, string);
 
-            return ResponseEntity.ok(filteredNotes.stream().map(note -> mapper.toDto(note)).toList());
+            return ResponseEntity.ok(filteredNotes.stream().map(mapper::toDto).toList());
         }
 
         return ResponseEntity.badRequest().build();
@@ -110,13 +114,9 @@ public class NoteController {
 
             if (FileType.valueOf(type).equals(FileType.txt)) {
                 fileContent = noteService.createTextFileContent(note).getBytes();
-            }
-
-            else if(FileType.valueOf(type).equals(FileType.pdf)){
+            } else if (FileType.valueOf(type).equals(FileType.pdf)) {
                 fileContent = noteService.createPdfContent(note);
-            }
-
-            else if(FileType.valueOf(type).equals(FileType.docx)){
+            } else if (FileType.valueOf(type).equals(FileType.docx)) {
                 fileContent = noteService.createDocxContent(note);
             }
 

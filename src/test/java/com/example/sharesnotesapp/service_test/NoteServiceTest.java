@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 
 import javax.persistence.EntityNotFoundException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ class NoteServiceTest {
         note.setTitle("A title");
         note.setText("Text");
         note.setGrade(8);
-        note.setDate(Date.valueOf("2022-10-10"));
+        note.setDate(LocalDate.now());
     }
 
     @Test
@@ -62,7 +63,7 @@ class NoteServiceTest {
         noteRequestDto.setUserId(user.getId());
         noteRequestDto.setTitle("A title");
         noteRequestDto.setText("Text");
-        noteRequestDto.setDate(Date.valueOf("2022-10-10"));
+        noteRequestDto.setDate(LocalDate.now());
         noteRequestDto.setGrade(8);
 
         Note savedNote = noteService.saveNote(user.getId(), noteRequestDto);
@@ -149,7 +150,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Title2");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         when(noteRepository.getNotesByUserOrderByDateDesc(user)).thenReturn(List.of(note, secondNote));
 
@@ -176,7 +177,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Something");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         String titleString = "Some";
 
@@ -194,7 +195,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Something");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         String titleString = "some";
 
@@ -212,7 +213,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Something");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         String titleString = "random";
 
@@ -230,7 +231,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Something");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         String titleString = "";
 
@@ -250,7 +251,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Something");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         String titleString = " ";
 
@@ -270,7 +271,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Title2");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         String titleString = "title";
 
@@ -290,7 +291,7 @@ class NoteServiceTest {
         secondNote.setUser(user);
         secondNote.setTitle("Title2");
         secondNote.setText("Text2");
-        secondNote.setDate(Date.valueOf("2024-12-12"));
+        secondNote.setDate(LocalDate.now());
 
         String titleString = "fantastic title";
 
@@ -313,7 +314,7 @@ class NoteServiceTest {
 
         assertEquals("New title", note.getTitle());
         assertEquals("Text", note.getText());
-        assertEquals(Date.valueOf("2022-10-10"), note.getDate());
+        assertEquals(LocalDate.now(), note.getDate());
         assertEquals(8, note.getGrade());
     }
 

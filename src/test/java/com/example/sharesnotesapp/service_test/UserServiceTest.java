@@ -208,25 +208,6 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUserCredential_InvalidEmail(){
-        String existingEmail = "existing_email@test.com";
-        Long id = 1L;
-        user.setEmail(existingEmail);
-
-        when(userRepository.findById(id)).thenReturn(Optional.of(user));
-        when(userRepository.findUserByEmail(existingEmail)).thenReturn(Optional.of(user));
-
-        UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setEmail(existingEmail);
-        IllegalArgumentException exception = assertThrows
-                (IllegalArgumentException.class, () -> userService.updateUserCredentials(id, userRequestDto));
-
-        String message = existingEmail + " is already used";
-
-        assertEquals(message, exception.getMessage());
-    }
-
-    @Test
     void testUpdateUserCredential_InvalidId(){
         Long nonExistingId = 123L;
 

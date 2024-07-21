@@ -87,21 +87,12 @@ public class UserServiceImpl implements UserService {
         User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
 
-        if (!(userRequestDto.getEmail().isEmpty() || userRequestDto.getEmail().isBlank())) {
-            validateEmail(userRequestDto.getEmail());
-            userToUpdate.setEmail(userRequestDto.getEmail());
-        }
-
-        if (!(userRequestDto.getFirstName().isEmpty() || userRequestDto.getFirstName().isBlank())) {
+        if (!userRequestDto.getFirstName().isEmpty() && !userRequestDto.getFirstName().isBlank()) {
             userToUpdate.setFirstName(userRequestDto.getFirstName());
         }
 
-        if (!(userRequestDto.getLastName().isEmpty() || userRequestDto.getLastName().isBlank())) {
+        if (!userRequestDto.getLastName().isEmpty() && !userRequestDto.getLastName().isBlank()) {
             userToUpdate.setLastName(userRequestDto.getLastName());
-        }
-
-        if (!(userRequestDto.getPassword().isEmpty() || userRequestDto.getPassword().isBlank())) {
-            userToUpdate.setPassword(userRequestDto.getPassword());
         }
 
         return userRepository.save(userToUpdate);
