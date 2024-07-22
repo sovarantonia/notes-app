@@ -27,8 +27,6 @@ public interface NoteService {
 
     String createTextFileContent(Note note);
 
-    String formatDate(Date date);
-
     byte[] createPdfContent(Note note);
 
     byte[] createDocxContent(Note note);
