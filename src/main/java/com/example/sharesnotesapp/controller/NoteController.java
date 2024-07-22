@@ -119,6 +119,9 @@ public class NoteController {
             } else if (FileType.valueOf(type).equals(FileType.docx)) {
                 fileContent = noteService.createDocxContent(note);
             }
+            else {
+                ResponseEntity.badRequest().build();
+            }
 
             return ResponseEntity.ok()
                     .headers(noteService.downloadNote(note, FileType.valueOf(type)))
@@ -127,8 +130,5 @@ public class NoteController {
         }
 
         return ResponseEntity.badRequest().build();
-
     }
-
-
 }

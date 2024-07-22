@@ -67,7 +67,6 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note updateNote(Long id, NoteRequestDto noteRequestDto) {
-
         Note updatedNote = noteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Note does not exist"));
 
         if (!noteRequestDto.getTitle().isBlank() && !noteRequestDto.getTitle().isEmpty()) {

@@ -152,10 +152,10 @@ class UserControllerTest {
         Long id = 999L;
         String requestBody
                 = "{ \"firstName\": \"New-name\", \"lastName\": \"Last-name\", \"email\": \"email@test.com\", \"password\": \"test123\" }";
-        UserRequestDto userRequestDto = new UserRequestDto();
 
         when(userService.getUserById(id)).thenReturn(Optional.empty());
-        when(userService.updateUserCredentials(id, userRequestDto)).thenThrow(new UsernameNotFoundException("No user with that username"));
+        when(userService.updateUserCredentials(any(Long.class), any(UserRequestDto.class)))
+                .thenThrow(new UsernameNotFoundException("No user with that username"));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
