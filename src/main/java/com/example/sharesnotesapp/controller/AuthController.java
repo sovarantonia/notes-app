@@ -1,6 +1,7 @@
 package com.example.sharesnotesapp.controller;
 
 import com.example.sharesnotesapp.model.User;
+import com.example.sharesnotesapp.model.dto.mapper.UserMapper;
 import com.example.sharesnotesapp.model.dto.request.UserLoginDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import com.example.sharesnotesapp.model.dto.response.UserLoginJwtDto;
@@ -31,6 +32,7 @@ public class AuthController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper mapper;
 
 
     @PostMapping("/register")
@@ -55,7 +57,7 @@ public class AuthController {
                     UserLoginJwtDto
                             .builder()
                             .tokenValue(getJwtUtils().generateJwtCookie(user))
-                            .email(user.getUsername())
+                            .userInfo(mapper.toDto(user))
                             .build()
             );
         } catch (BadCredentialsException ex) {

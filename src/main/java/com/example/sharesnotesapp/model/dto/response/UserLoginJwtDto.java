@@ -5,6 +5,6 @@ import lombok.Data;
 @Builder
 @Data
 public class UserLoginJwtDto {
-    private String email;
+    private UserResponseDto userInfo;
     private String tokenValue;
 }
