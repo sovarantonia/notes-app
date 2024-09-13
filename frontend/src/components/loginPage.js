@@ -5,6 +5,7 @@ import '../resources/header.css'
 import login_image from "../resources/login.svg";
 import Header from './header';
 import {useNavigate} from "react-router-dom";
+import {useUser} from './userContext';
 
 const LoginPage = ({ onLogin }) => {
     const [email, setEmail] = useState('');
@@ -12,16 +13,20 @@ const LoginPage = ({ onLogin }) => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    const { setUser } = useUser();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
-            setError('Enter the credentials');
+            setError('Enter your email and password');
             return;
         }
 
         try {
-            await onLogin(email, password);
-            navigate("/home");
+            const { tokenValue, userId } = await login(email, password); // Get token and userId from API response
+            localStorage.setItem('tokenValue', tokenValue);
+            setUser({ email, userId }); // Update context with user information
+            navigate('/home'); // Redirect to home page after successful login
         } catch (error) {
             setError('Login failed. Please check your credentials.');
         }

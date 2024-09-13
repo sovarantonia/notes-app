@@ -8,7 +8,7 @@ const Sidebar = ({ onLogout }) => {
             <h2>Navigation</h2>
             <ul>
                 <li><Link to="/home">Home</Link></li>
-                <li>Create new note</li>
+                <li> <Link to="/create-note">Create new note </Link></li>
                 <li>View notes</li>
                 <li><button onClick={onLogout}>Logout</button></li>
             </ul>
