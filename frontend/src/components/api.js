@@ -9,7 +9,7 @@ const api = axios.create({
 
 // Interceptor to add the JWT token to the Authorization header on each request
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('tokenValue');
+    const token = sessionStorage.getItem('tokenValue');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -22,14 +22,13 @@ api.interceptors.request.use((config) => {
 export const login = async (email, password) => {
     try {
         const response = await api.post('/login', {email, password});
-        const token = response.data.tokenValue; // Assuming the backend sends the token as `tokenValue`
 
         // Store the token in localStorage to persist session
-        localStorage.setItem('tokenValue', token);
+        const {data} = response; // Destructure the response data
+        return data;
 
-        return response.data;
     } catch (error) {
-        console.error('Login error:', error); // Log the error for debugging
+        console.error('Login error:', error);
         if (error.response && error.response.data) {
             throw new Error(error.response.data.message || 'Login failed');
         }
@@ -43,9 +42,9 @@ export const register = async (firstName, lastName, email, password) => {
         const response = await api.post('/register', {firstName, lastName, email, password});
         return response.data;
     } catch (error) {
-        console.error('Error response:', error); // Log the entire error object for debugging
+        console.error('Error response:', error);
         if (error.response && error.response.data) {
-            throw new Error(JSON.stringify(error.response.data)); // Pass error details from backend
+            throw new Error(JSON.stringify(error.response.data));
         } else {
             throw new Error('Registration failed');
         }
@@ -57,9 +56,9 @@ export const note = async (userId, title, text, date, grade) => {
         const response = await api.post('/notes', {userId, title, text, date, grade});
         return response.data;
     } catch (error) {
-        console.error('Error response:', error); // Log the entire error object for debugging
+        console.error('Error response:', error);
         if (error.response && error.response.data) {
-            throw new Error(JSON.stringify(error.response.data)); // Pass error details from backend
+            throw new Error(JSON.stringify(error.response.data));
         } else {
             throw new Error('Failed creating a note');
         }

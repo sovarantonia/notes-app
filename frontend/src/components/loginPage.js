@@ -7,13 +7,12 @@ import Header from './header';
 import {useNavigate} from "react-router-dom";
 import {useUser} from './userContext';
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
-    const { setUser } = useUser();
+    const { login: setUser, logout } = useUser(); // Make sure setUser is correctly imported as login
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,10 +22,12 @@ const LoginPage = ({ onLogin }) => {
         }
 
         try {
-            const { tokenValue, userId } = await login(email, password); // Get token and userId from API response
-            localStorage.setItem('tokenValue', tokenValue);
-            setUser({ email, userId }); // Update context with user information
-            navigate('/home'); // Redirect to home page after successful login
+            const response = await login(email, password);
+            const { userInfo, tokenValue } = response;
+            const { email: userEmail, id: userId, firstName, lastName } = userInfo;
+
+            setUser({ email: userEmail, userId, firstName, lastName }, tokenValue);
+            navigate('/home');
         } catch (error) {
             setError('Login failed. Please check your credentials.');
         }
