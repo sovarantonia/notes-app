@@ -18,61 +18,62 @@ const RegisterPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
-        if (!validateEmail(email)) {
-            setError('Invalid email format');
-            return;
-        }
-        if (password.length < 6) {
-            setError('Password must be at least 6 characters long');
-            return;
-        }
 
-        if (!firstName || !lastName || !email || !password || !confirmPassword) {
-            setError('All fields are required')
-            return;
-        }
+        if (!validateForm()) return;
 
         try {
             await register(firstName, lastName, email, password);
-            // Registration successful, display notification and redirect to login page
             alert('Registration successful! Please login with your credentials.');
             history('/login');
         } catch (error) {
-            console.log(error.message);
-            setError(JSON.parse(error.message));
+            try {
+                const parsedError = JSON.parse(error.message);
+                setError(parsedError || 'Something went wrong.');
+            } catch (parseError) {
+                setError('An unexpected error occurred.');
+            }
         }
     };
 
-    const handleBlur = (field) => {
-        if (field === 'email' && !validateEmail(email) && email.length !== 0) {
-            setError('Invalid email format');
-            return;
+    const validateForm = () => {
+        if (!firstName || !lastName || !email || !password || !confirmPassword) {
+            setError('All fields are required.');
+            return false;
         }
-        if (field === 'password' && password.length < 6 && password.length !== 0) {
-            setError('Password must be at least 6 characters long');
-            return;
+        if (!validateEmail(email)) {
+            setError('Invalid email format.');
+            return false;
         }
-        if (field === 'confirmPassword' && password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters long.');
+            return false;
         }
-        setError('');
-    }
+        if (password !== confirmPassword) {
+            setError('Passwords do not match.');
+            return false;
+        }
+        return true;
+    };
 
-    const validateEmail = (email) => {
-        // Basic email format validation
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    const handleBlur = (field) => {
+        if (field === 'email' && !validateEmail(email)) {
+            setError('Invalid email format');
+        } else if (field === 'password' && password.length < 6) {
+            setError('Password must be at least 6 characters long');
+        } else if (field === 'confirmPassword' && password !== confirmPassword) {
+            setError('Passwords do not match');
+        } else {
+            setError('');
+        }
     };
 
     return (
         <div className="container">
             <Header/>
             <form onSubmit={handleSubmit} className="form">
-                {error && <div className="error">{error}</div>}
+                {error && <div className="error" aria-live="assertive">{error}</div>}
                 <h2>Register</h2>
                 <div className="form-group">
                     <label htmlFor="firstName">First Name:</label>
@@ -80,10 +81,7 @@ const RegisterPage = () => {
                         type="text"
                         id="firstName"
                         value={firstName}
-                        onChange={(e) => {
-                            setFirstName(e.target.value);
-                            setError('');
-                        }}
+                        onChange={(e) => setFirstName(e.target.value)}
                         onBlur={() => handleBlur('firstName')}
                         placeholder="First name"
                         required
@@ -95,10 +93,7 @@ const RegisterPage = () => {
                         type="text"
                         id="lastName"
                         value={lastName}
-                        onChange={(e) => {
-                            setLastName(e.target.value);
-                            setError('');
-                        }}
+                        onChange={(e) => setLastName(e.target.value)}
                         onBlur={() => handleBlur('lastName')}
                         placeholder="Last name"
                         required
@@ -110,10 +105,7 @@ const RegisterPage = () => {
                         type="email"
                         id="email"
                         value={email}
-                        onChange={(e) => {
-                            setEmail(e.target.value);
-                            setError('');
-                        }}
+                        onChange={(e) => setEmail(e.target.value)}
                         onBlur={() => handleBlur('email')}
                         placeholder="Email"
                         required
@@ -125,10 +117,7 @@ const RegisterPage = () => {
                         type="password"
                         id="password"
                         value={password}
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                            setError('');
-                        }}
+                        onChange={(e) => setPassword(e.target.value)}
                         onBlur={() => handleBlur('password')}
                         placeholder="Password"
                         required
@@ -140,21 +129,18 @@ const RegisterPage = () => {
                         type="password"
                         id="confirmPassword"
                         value={confirmPassword}
-                        onChange={(e) => {
-                            setConfirmPassword(e.target.value);
-                            setError('');
-                        }}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                         onBlur={() => handleBlur('confirmPassword')}
                         placeholder="Confirm password"
                         required
                     />
                 </div>
                 <button type="submit">Register</button>
-                <a onClick={() => window.location.href = '/login'}>Already have an account? Login here</a>
+                <a onClick={() => history('/login')}>Already have an account? Login here</a>
             </form>
             <img src={sign_up} alt="Sign Up" className="signup-image"/>
         </div>
     );
-}
+};
 
 export default RegisterPage;

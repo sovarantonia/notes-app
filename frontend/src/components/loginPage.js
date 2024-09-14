@@ -5,23 +5,29 @@ import '../resources/header.css'
 import login_image from "../resources/login.svg";
 import Header from './header';
 import {useNavigate} from "react-router-dom";
+import {useUser} from './userContext';
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login: setUser, logout } = useUser(); // Make sure setUser is correctly imported as login
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
-            setError('Enter the credentials');
+            setError('Enter your email and password');
             return;
         }
 
         try {
-            await onLogin(email, password);
-            navigate("/home");
+            const response = await login(email, password);
+            const { userInfo, tokenValue } = response;
+            const { email: userEmail, id: userId, firstName, lastName } = userInfo;
+
+            setUser({ email: userEmail, userId, firstName, lastName }, tokenValue);
+            navigate('/home');
         } catch (error) {
             setError('Login failed. Please check your credentials.');
         }

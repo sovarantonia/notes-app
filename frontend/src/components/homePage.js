@@ -1,10 +1,17 @@
 import React from "react";
 import Sidebar from "./sidebar";
 import '../resources/homepage.css';
-const HomePage = ({ onLogout }) => {
+import {useUser} from "./userContext";
+const HomePage = () => {
+    const { logout } = useUser();
+
+    const handleLogout = () => {
+        logout();
+        window.location.href = '/login';
+    };
     return (
         <div className="home-page">
-            <Sidebar onLogout={onLogout} />
+            <Sidebar onLogout={handleLogout}/>
             <div className="main-content">
                 <h2>Home Page</h2>
             </div>
