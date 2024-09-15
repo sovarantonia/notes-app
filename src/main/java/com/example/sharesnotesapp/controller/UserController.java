@@ -2,7 +2,7 @@ package com.example.sharesnotesapp.controller;
 
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.mapper.UserMapper;
-import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
+import com.example.sharesnotesapp.model.dto.request.UserNameDto;
 import com.example.sharesnotesapp.model.dto.response.UserResponseDto;
 import com.example.sharesnotesapp.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateCredentials(@PathVariable Long id, @Valid @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> updateCredentials(@PathVariable Long id, @Valid @RequestBody UserNameDto userRequestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {

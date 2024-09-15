@@ -1,6 +1,7 @@
 package com.example.sharesnotesapp.service.user;
 
 import com.example.sharesnotesapp.model.User;
+import com.example.sharesnotesapp.model.dto.request.UserNameDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -18,6 +19,6 @@ public interface UserService extends UserDetailsService {
 
     void deleteUser(Long id);
 
-    User updateUserCredentials(Long id, UserRequestDto userRequestDto);
+    User updateUserCredentials(Long id, UserNameDto userRequestDto);
 
 }

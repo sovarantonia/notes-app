@@ -90,7 +90,7 @@ class NoteControllerTest {
         noteRequestDto.setDate(LocalDate.parse("2024-05-05"));
         noteRequestDto.setGrade(9);
 
-        UserResponseDto userResponseDto = new UserResponseDto(user.getFirstName(), user.getLastName(), user.getEmail());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto noteResponseDto = new NoteResponseDto(userResponseDto, note.getTitle(), note.getText(), note.getDate(), note.getGrade());
 
         String requestBody = "{ \"title\": \"A title\", \"text\": \"Some text\", \"date\": \"05-05-2024\", \"grade\": 9}";
@@ -140,7 +140,7 @@ class NoteControllerTest {
     @Test
     void testGetNoteById() throws Exception {
         Long id = 1L;
-        UserResponseDto userResponseDto = new UserResponseDto(user.getFirstName(), user.getLastName(), user.getEmail());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto noteResponseDto = new NoteResponseDto(userResponseDto, note.getTitle(), note.getText(), note.getDate(), note.getGrade());
 
         when(noteService.getNoteById(id)).thenReturn(Optional.of(note));
@@ -221,7 +221,7 @@ class NoteControllerTest {
     @Test
     void testUpdateNote() throws Exception {
         Long id = 1L;
-        UserResponseDto userResponseDto = new UserResponseDto(user.getFirstName(), user.getLastName(), user.getEmail());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto noteResponseDto
                 = new NoteResponseDto(userResponseDto, "New title", "Add new text", note.getDate(), 7);
 
@@ -280,7 +280,7 @@ class NoteControllerTest {
         secondNote.setText("text");
         secondNote.setGrade(7);
 
-        UserResponseDto userResponseDto = new UserResponseDto(user.getFirstName(), user.getLastName(), user.getEmail());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto noteResponseDto
                 = new NoteResponseDto(userResponseDto, note.getTitle(), note.getText(), note.getDate(), note.getGrade());
         NoteResponseDto secondNoteResponseDto
@@ -328,7 +328,7 @@ class NoteControllerTest {
 
         String titleString = "day";
 
-        UserResponseDto userResponseDto = new UserResponseDto(user.getFirstName(), user.getLastName(), user.getEmail());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto secondNoteResponseDto
                 = new NoteResponseDto
                 (userResponseDto, secondNote.getTitle(), secondNote.getText(), secondNote.getDate(), secondNote.getGrade());

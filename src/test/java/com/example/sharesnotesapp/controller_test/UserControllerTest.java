@@ -3,6 +3,7 @@ package com.example.sharesnotesapp.controller_test;
 import com.example.sharesnotesapp.controller.UserController;
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.mapper.UserMapper;
+import com.example.sharesnotesapp.model.dto.request.UserNameDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import com.example.sharesnotesapp.model.dto.response.UserResponseDto;
 import com.example.sharesnotesapp.service.user.UserServiceImpl;
@@ -51,6 +52,7 @@ class UserControllerTest {
         MockitoAnnotations.openMocks(this);
 
         user = new User();
+        user.setId(1L);
         user.setFirstName("First-name");
         user.setLastName("Last-name");
         user.setPassword("test123");
@@ -63,7 +65,7 @@ class UserControllerTest {
     @WithMockUser(username = "email@test.com", password = "test123")
     void testGetUserById() throws Exception {
         Long id = 1L;
-        UserResponseDto userResponseDto = new UserResponseDto(user.getFirstName(), user.getLastName(), user.getEmail());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
 
         when(userService.getUserById(id)).thenReturn(Optional.of(user));
         when(mapper.toDto(user)).thenReturn(userResponseDto);
@@ -125,15 +127,13 @@ class UserControllerTest {
         Long id = 1L;
         String requestBody
                 = "{ \"firstName\": \"New-name\", \"lastName\": \"Last-name\", \"email\": \"email@test.com\", \"password\": \"test123\" }";
-        UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setFirstName(user.getFirstName());
-        userRequestDto.setLastName(user.getLastName());
-        userRequestDto.setEmail(user.getEmail());
-        userRequestDto.setPassword(user.getPassword());
-        UserResponseDto userResponseDto = new UserResponseDto("New-name", user.getLastName(), user.getEmail());
+        UserNameDto userNameDto = new UserNameDto();
+        userNameDto.setFirstName(user.getFirstName());
+        userNameDto.setLastName(user.getLastName());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), "New-name", user.getLastName(), user.getEmail());
 
         when(userService.getUserById(id)).thenReturn(Optional.of(user));
-        when(mapper.toDto(userService.updateUserCredentials(id, userRequestDto))).thenReturn(userResponseDto);
+        when(mapper.toDto(userService.updateUserCredentials(id, userNameDto))).thenReturn(userResponseDto);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -154,7 +154,7 @@ class UserControllerTest {
                 = "{ \"firstName\": \"New-name\", \"lastName\": \"Last-name\", \"email\": \"email@test.com\", \"password\": \"test123\" }";
 
         when(userService.getUserById(id)).thenReturn(Optional.empty());
-        when(userService.updateUserCredentials(any(Long.class), any(UserRequestDto.class)))
+        when(userService.updateUserCredentials(any(Long.class), any(UserNameDto.class)))
                 .thenThrow(new UsernameNotFoundException("No user with that username"));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

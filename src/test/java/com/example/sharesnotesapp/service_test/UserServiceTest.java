@@ -1,6 +1,7 @@
 package com.example.sharesnotesapp.service_test;
 
 import com.example.sharesnotesapp.model.User;
+import com.example.sharesnotesapp.model.dto.request.UserNameDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import com.example.sharesnotesapp.repository.UserRepository;
 import com.example.sharesnotesapp.service.user.UserServiceImpl;
@@ -197,11 +198,11 @@ class UserServiceTest {
     void testUpdateUserCredentials(){
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setFirstName("New-Name");
-        userService.updateUserCredentials(1L, userRequestDto);
+        UserNameDto userNameDto = new UserNameDto();
+        userNameDto.setFirstName("New-Name");
+        userService.updateUserCredentials(1L, userNameDto);
 
-        assertEquals(userRequestDto.getFirstName(), user.getFirstName());
+        assertEquals(userNameDto.getFirstName(), user.getFirstName());
         assertEquals("ExampleB", user.getLastName());
         assertEquals("test_example@test.com", user.getEmail());
         assertEquals(passwordEncoder.encode("test123"), user.getPassword());
@@ -213,11 +214,11 @@ class UserServiceTest {
 
         when(userRepository.findById(nonExistingId)).thenReturn(Optional.empty());
 
-        UserRequestDto userRequestDto = new UserRequestDto();
-        userRequestDto.setFirstName("Name");
+        UserNameDto userNameDto = new UserNameDto();
+        userNameDto.setFirstName("Name");
 
         UsernameNotFoundException exception = assertThrows
-                (UsernameNotFoundException.class, () -> userService.updateUserCredentials(nonExistingId, userRequestDto));
+                (UsernameNotFoundException.class, () -> userService.updateUserCredentials(nonExistingId, userNameDto));
 
         String message = "No user with that username";
 
@@ -228,9 +229,9 @@ class UserServiceTest {
     void testUpdateUserCredential_AllEmptyFields(){
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        UserRequestDto userRequestDto = new UserRequestDto();
+        UserNameDto userNameDto = new UserNameDto();
 
-        userService.updateUserCredentials(1L, userRequestDto);
+        userService.updateUserCredentials(1L, userNameDto);
 
         assertEquals("ExampleA", user.getFirstName());
         assertEquals("ExampleB", user.getLastName());

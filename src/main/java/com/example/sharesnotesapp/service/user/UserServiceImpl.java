@@ -1,6 +1,7 @@
 package com.example.sharesnotesapp.service.user;
 
 import com.example.sharesnotesapp.model.User;
+import com.example.sharesnotesapp.model.dto.request.UserNameDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import com.example.sharesnotesapp.repository.UserRepository;
 import com.example.sharesnotesapp.service.user.UserService;
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserCredentials(Long id, UserRequestDto userRequestDto) {
+    public User updateUserCredentials(Long id, UserNameDto userRequestDto) {
         User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
 
