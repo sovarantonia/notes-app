@@ -27,7 +27,6 @@ import java.net.URI;
 @RequestMapping
 @RequiredArgsConstructor
 @Getter
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
