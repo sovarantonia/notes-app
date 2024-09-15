@@ -8,15 +8,22 @@ export const UserProvider = ({ children }) => {
     const login = (userInfo, token) => {
         setUser({ ...userInfo, token });
         sessionStorage.setItem('tokenValue', token);
+        sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
     };
 
     const logout = () => {
         setUser(null);
         sessionStorage.removeItem('tokenValue');
+        sessionStorage.removeItem('userInfo')
     };
 
+    const update = (userInfo) => {
+        setUser(userInfo)
+        sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+    }
+
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ user, login, logout, update }}>
             {children}
         </UserContext.Provider>
     );

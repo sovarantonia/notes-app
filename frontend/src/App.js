@@ -7,22 +7,27 @@ import HomePage from "./components/homePage";
 import CreateNotePage from "./components/createNotePage";
 import {UserProvider} from "./components/userContext";
 import ProtectedRoute from "./components/protectedRoute";
+import UserProfile from "./components/userProfile";
 
 function App() {
     return (
         <UserProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={<LandingPage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/" element={<LandingPage/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/register" element={<RegisterPage/>}/>
                     <Route
                         path="/home"
-                        element={<ProtectedRoute element={HomePage} />}
+                        element={<ProtectedRoute element={HomePage}/>}
                     />
                     <Route
                         path="/create-note"
-                        element={<ProtectedRoute element={CreateNotePage} />}
+                        element={<ProtectedRoute element={CreateNotePage}/>}
+                    />
+                    <Route
+                        path="/profile"
+                        element={<ProtectedRoute element={UserProfile}/>}
                     />
                 </Routes>
             </Router>

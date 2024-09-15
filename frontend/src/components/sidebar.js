@@ -18,6 +18,7 @@ const Sidebar = ({ onLogout }) => {
                 <li><Link to="/home">Home</Link></li>
                 <li><Link to="/create-note">Create new note</Link></li>
                 <li>View notes</li>
+                <li><Link to="/profile">Profile</Link></li>
                 <li><button onClick={handleLogout}>Logout</button></li>
             </ul>
         </div>

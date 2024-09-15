@@ -64,3 +64,17 @@ export const note = async (userId, title, text, date, grade) => {
         }
     }
 }
+
+export const updateUserCredentials = async (userId, firstName, lastName) => {
+    try {
+        const response = await api.patch(`user/${userId}`, {firstName, lastName});
+        return response.data;
+    } catch (error){
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed updating credentials');
+        }
+    }
+}

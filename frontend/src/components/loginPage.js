@@ -12,7 +12,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { login: setUser, logout } = useUser(); // Make sure setUser is correctly imported as login
+    const { login: setUser } = useUser();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,9 +24,9 @@ const LoginPage = () => {
         try {
             const response = await login(email, password);
             const { userInfo, tokenValue } = response;
-            const { email: userEmail, id: userId, firstName, lastName } = userInfo;
+            const { email: userEmail, id: id, firstName, lastName } = userInfo;
 
-            setUser({ email: userEmail, userId, firstName, lastName }, tokenValue);
+            setUser({ email: userEmail, id: id, firstName, lastName }, tokenValue);
             navigate('/home');
         } catch (error) {
             setError('Login failed. Please check your credentials.');
