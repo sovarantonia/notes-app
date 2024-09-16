@@ -1,0 +1,96 @@
+.create-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+    border: 2px solid #7d3e53;
+    border-radius: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+    width: 100px;
+    margin-right: 15px;
+    text-align: left;
+}
+
+.form-group input,
+.form-group .react-dropdown {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    width: 100%;
+}
+
+.form-group .react-datepicker-wrapper {
+    flex: 1;
+    padding: 0;
+}
+
+.form-group .react-datepicker-wrapper {
+    flex: 1;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+.form-group .react-datepicker__input-container {
+    width: 100%;
+}
+
+.form-group .react-datepicker__input-container input {
+    border: none;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-group .react-datepicker {
+    border: 1px solid #ccc;
+
+}
+
+.form-group .react-dropdown {
+    flex: 1; /* Ensures it behaves like the other inputs */
+}
+
+.form-group .content-input {
+    height: 110px; /* Adjust height as needed */
+    resize: horizontal; /* Allows vertical resizing */
+    width: calc(100% - 200px); /* Adjust width to account for label width and margin */
+}
+
+.create-form button[type="submit"] {
+    margin-top: 20px; /* Space between the dropdown and the submit button */
+    padding: 10px;
+    background-color: #D3D3D3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: center;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.create-form button:hover {
+    background-color: #218838;
+}
+
+.create-form .error {
+    color: red;
+    margin-bottom: 10px;
+}

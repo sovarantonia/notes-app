@@ -2,7 +2,9 @@ import {useUser} from "./userContext";
 import Sidebar from "./sidebar";
 import React from "react";
 import {useState} from 'react';
-import {updateUserCredentials} from "./api";
+import {deleteAccount, updateUserCredentials} from "./api";
+import ConfirmDeletePopup from "./deletePopup";
+import '../resources/delete-popup.css'
 
 const UserProfile = () => {
     const [error, setError] = useState('');
@@ -14,9 +16,31 @@ const UserProfile = () => {
     const [firstName, setFirstName] = useState(user.firstName || '');
     const [lastName, setLastName] = useState(user.lastName || '');
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const openPopup = () => {
+        setIsPopupOpen(true);
+    };
+
+    // Close the popup without taking any action
+    const closePopup = () => {
+        setIsPopupOpen(false);
+    };
+
+    // Handle account deletion logic here
+    const handleDeleteAccount = async () => {
+        setIsPopupOpen(false);
+        try {
+            await deleteAccount(userId);
+            alert('Account deleted successfully');
+            logout();
+        } catch (error) {
+            setError('Error deleting account');
+        }
+    };
+
     const handleLogout = () => {
         logout();
-        window.location.href = '/login';
     };
 
     const handleSubmit = async (e) => {
@@ -80,7 +104,13 @@ const UserProfile = () => {
                             required
                         />
                     </div>
-                    <button type="submit">Update</button>
+                    <button type="submit" onClick={handleSubmit}>Update</button>
+                    <button type="button" onClick={openPopup} className="delete-acc-btn">Delete account</button>
+                    <ConfirmDeletePopup
+                        isOpen={isPopupOpen}
+                        onClose={closePopup}
+                        onConfirm={handleDeleteAccount}
+                    />
                 </form>
             </div>
         </div>

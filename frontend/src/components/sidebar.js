@@ -8,7 +8,6 @@ const Sidebar = ({ onLogout }) => {
 
     const handleLogout = () => {
         logout();
-        window.location.href = '/login';
     };
 
     return (

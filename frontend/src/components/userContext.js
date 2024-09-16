@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
         setUser(null);
         sessionStorage.removeItem('tokenValue');
         sessionStorage.removeItem('userInfo')
+        window.location.href = '/login'
     };
 
     const update = (userInfo) => {

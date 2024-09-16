@@ -9,27 +9,28 @@ import "react-datepicker/dist/react-datepicker.css";
 import {useUser} from "./userContext";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import '../resources/create-note.css';
 
-const CreateNotePage = ({ onLogout }) => {
+const CreateNotePage = ({onLogout}) => {
     const [error, setError] = useState('');
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
     const [date, setDate] = useState(new Date());
     const [grade, setGrade] = useState(1);
 
-    const { user } = useUser();
+    const {user} = useUser();
 
     const options = [
-        { label: '1', value: 1 },
-        { label: '2', value: 2 },
-        { label: '3', value: 3 },
-        { label: '4', value: 4 },
-        { label: '5', value: 5 },
-        { label: '6', value: 6 },
-        { label: '7', value: 7 },
-        { label: '8', value: 8 },
-        { label: '9', value: 9 },
-        { label: '10', value: 10 },
+        {label: '1', value: 1},
+        {label: '2', value: 2},
+        {label: '3', value: 3},
+        {label: '4', value: 4},
+        {label: '5', value: 5},
+        {label: '6', value: 6},
+        {label: '7', value: 7},
+        {label: '8', value: 8},
+        {label: '9', value: 9},
+        {label: '10', value: 10},
     ];
 
 
@@ -59,45 +60,54 @@ const CreateNotePage = ({ onLogout }) => {
 
     return (
         <div className="create-note-page">
-            <Sidebar onLogout={onLogout} />
+            <Sidebar onLogout={onLogout}/>
             <div className="main-content">
                 <h2>Create note</h2>
                 <div className="create-form">
-                    <form onSubmit={handleSubmit} className="form">
+                    <form onSubmit={handleSubmit}>
                         {error && <div className="error" aria-live="assertive">{error}</div>}
-                        <label htmlFor="title">Title: </label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={e => setTitle(e.target.value)}
-                            placeholder="Title"
-                            required
-                        />
+                        <div className="form-group">
+                            <label htmlFor="title">Title: </label>
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={e => setTitle(e.target.value)}
+                                placeholder="Title"
+                                required
+                            />
+                        </div>
 
-                        <label htmlFor="text">Content: </label>
-                        <input
-                            type="text"
-                            value={text}
-                            onChange={e => setText(e.target.value)}
-                            placeholder="Text"
-                        />
+                        <div className="form-group">
+                            <label htmlFor="text">Content: </label>
+                            <input
+                                type="text"
+                                value={text}
+                                onChange={e => setText(e.target.value)}
+                                placeholder="Text"
+                                className="content-input"
+                            />
+                        </div>
 
-                        <label htmlFor="date">Date: </label>
-                        <DatePicker
-                            dateFormat="dd-MM-yyyy"
-                            maxDate={new Date()}
-                            selected={date}
-                            onChange={(date) => setDate(date)}
-                        />
+                        <div className="form-group">
+                            <label htmlFor="date">Date: </label>
+                            <DatePicker
+                                dateFormat="dd-MM-yyyy"
+                                maxDate={new Date()}
+                                selected={date}
+                                onChange={(date) => setDate(date)}
+                            />
+                        </div>
 
-                        <label htmlFor="grade">Grade: </label>
-                        <Dropdown
-                            options={options}
-                            value={options.find(opt => opt.value === grade)} // Set selected option based on grade
-                            onChange={handleChange}
-                            placeholder="Select a grade"
-                            required
-                        />
+                        <div className="form-group">
+                            <label htmlFor="grade">Grade: </label>
+                            <Dropdown
+                                options={options}
+                                value={options.find(opt => opt.value === grade)} // Set selected option based on grade
+                                onChange={handleChange}
+                                placeholder="Select a grade"
+                                required
+                            />
+                        </div>
 
                         <button type="submit">Submit</button>
                     </form>

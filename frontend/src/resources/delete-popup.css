@@ -1,0 +1,45 @@
+.delete-acc-btn {
+    margin-top: 25px;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+/* Hover effect for the delete button */
+.delete-acc-btn:hover {
+    background-color: #d9534f; /* Red color when hovered */
+}
+
+.form button {
+    padding: 10px;
+    background-color: #D3D3D3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+/* For consistency with other buttons */
+.form button[type="button"][type="cancel"] {
+    background-color: #D3D3D3;
+}
+
+.form button[type="delete"]:hover {
+    background-color: #d9534f; /* Darker Green */
+}
+
+.form button[type="cancel"]:hover {
+    background-color: #218838;
+}
+
+.popup-actions {
+    display: flex;
+    gap: 20px; /* Add space between buttons */
+    justify-content: center; /* Optional: Align buttons at the center */
+}

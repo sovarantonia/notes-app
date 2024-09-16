@@ -78,3 +78,17 @@ export const updateUserCredentials = async (userId, firstName, lastName) => {
         }
     }
 }
+
+export const deleteAccount = async (userId) => {
+    try{
+        const response = await api.delete(`user/${userId}`);
+        return response.data;
+    } catch (error){
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed deleting account');
+        }
+    }
+}
