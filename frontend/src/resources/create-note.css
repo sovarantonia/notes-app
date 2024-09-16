@@ -62,17 +62,17 @@
 }
 
 .form-group .react-dropdown {
-    flex: 1; /* Ensures it behaves like the other inputs */
+    flex: 1;
 }
 
 .form-group .content-input {
-    height: 110px; /* Adjust height as needed */
-    resize: horizontal; /* Allows vertical resizing */
-    width: calc(100% - 200px); /* Adjust width to account for label width and margin */
+    height: 110px;
+    resize: horizontal;
+    width: calc(100% - 200px);
 }
 
 .create-form button[type="submit"] {
-    margin-top: 20px; /* Space between the dropdown and the submit button */
+    margin-top: 20px;
     padding: 10px;
     background-color: #D3D3D3;
     color: white;
@@ -80,7 +80,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    align-self: center;
+    justify-content: center;
     margin-left: auto;
     margin-right: auto;
 
