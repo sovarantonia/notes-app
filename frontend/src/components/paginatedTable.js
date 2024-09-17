@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {viewAllNotesByUser} from "./api";
+import React, {useState} from 'react';
+import "../resources/table.css";
 
 const PaginatedTable = ({data}) => {
     const [currentPage, setCurrentPage] = useState(1);

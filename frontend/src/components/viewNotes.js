@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import {filterNotesByTitle} from "./api";
 import PaginatedTable from "./paginatedTable";
 import { debounce } from 'lodash';
+import "../resources/view-notes.css";
 
 const ViewNotes = () => {
     const { logout } = useUser();
@@ -44,7 +45,7 @@ const ViewNotes = () => {
             <div className="main-content">
                 <h2>View notes</h2>
                 <input
-                    type="text"
+                    type="search-text"
                     placeholder="Search..."
                     value={title}
                     onChange={handleTitleChange}

@@ -1,0 +1,25 @@
+input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    width: 30%; /* Make the search bar as wide as its container */
+}
+
+button {
+    padding: 10px;
+    background-color: #D8698E; /* Active button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+button.deactivated {
+    background-color: #D3D3D3; /* Light gray for deactivated state */
+    color: #a1a1a1; /* Gray text color */
+    cursor: not-allowed; /* Indicate that the button is not clickable */
+    opacity: 0.6; /* Slightly transparent to indicate disabled state */
+}
