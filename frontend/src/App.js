@@ -8,6 +8,7 @@ import CreateNotePage from "./components/createNotePage";
 import {UserProvider} from "./components/userContext";
 import ProtectedRoute from "./components/protectedRoute";
 import UserProfile from "./components/userProfile";
+import ViewNotes from "./components/viewNotes";
 
 function App() {
     return (
@@ -28,6 +29,10 @@ function App() {
                     <Route
                         path="/profile"
                         element={<ProtectedRoute element={UserProfile}/>}
+                    />
+                    <Route
+                        path="/view-notes"
+                        element={<ProtectedRoute element={ViewNotes}/>}
                     />
                 </Routes>
             </Router>

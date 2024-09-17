@@ -69,7 +69,7 @@ export const updateUserCredentials = async (userId, firstName, lastName) => {
     try {
         const response = await api.patch(`user/${userId}`, {firstName, lastName});
         return response.data;
-    } catch (error){
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -80,15 +80,99 @@ export const updateUserCredentials = async (userId, firstName, lastName) => {
 }
 
 export const deleteAccount = async (userId) => {
-    try{
+    try {
         const response = await api.delete(`user/${userId}`);
         return response.data;
-    } catch (error){
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
         } else {
             throw new Error('Failed deleting account');
+        }
+    }
+}
+
+export const viewAllNotesByUser = async () => {
+    try {
+        const response = await api.get('/notes');
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving notes');
+        }
+    }
+}
+
+export const getNoteById = async (noteId) => {
+    try {
+        const response = await api.get(`/notes/${noteId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the note');
+        }
+    }
+}
+
+export const filterNotesByTitle = async (title) => {
+    try {
+        const response = await api.get('/notes/filter', {params: {string: title} });
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the notes');
+        }
+    }
+}
+
+export const deleteNote = async (noteId) => {
+    try {
+        const response = await api.delete(`/notes/${noteId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed deleting the note');
+        }
+    }
+}
+
+export const updateNote = async (noteId, userId, title, text, date, grade) => {
+    try {
+        const response = await api.patch(`/notes/${noteId}`, {data: userId, title, text, date, grade});
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed updating the note');
+        }
+    }
+}
+
+export const downloadNote = async (noteId, fileType) => {
+    try {
+        const response = await api.get(`/notes/${noteId}/download`, {params: fileType});
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed downloading the note');
         }
     }
 }

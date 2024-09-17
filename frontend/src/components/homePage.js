@@ -7,7 +7,6 @@ const HomePage = () => {
 
     const handleLogout = () => {
         logout();
-        window.location.href = '/login';
     };
     return (
         <div className="home-page">
