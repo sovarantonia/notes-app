@@ -11,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class NoteResponseDto {
     private UserResponseDto user;
+    private Long id;
     private String title;
     private String text;
     @JsonFormat(pattern = "dd-MM-yyyy")

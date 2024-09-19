@@ -8,6 +8,7 @@ import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
 import com.example.sharesnotesapp.model.dto.response.NoteResponseDto;
 import com.example.sharesnotesapp.service.note.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -123,10 +124,12 @@ public class NoteController {
                 ResponseEntity.badRequest().build();
             }
 
-            return ResponseEntity.ok()
-                    .headers(noteService.downloadNote(note, FileType.valueOf(type)))
-                    .body(fileContent);
+            HttpHeaders headers = noteService.downloadNote(note, FileType.valueOf(type));
+            headers.add("Access-Control-Expose-Headers", "Content-Disposition");
 
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(fileContent);
         }
 
         return ResponseEntity.badRequest().build();
