@@ -10,6 +10,12 @@ th, td {
     text-align: left;
 }
 
+td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 th {
     background-color: #f4f4f4;
 }
@@ -29,4 +35,21 @@ tbody tr:nth-child(even) {
 thead th {
     background-color: #F2A2B1;
     font-weight: bold;
+}
+
+button {
+    padding: 10px;
+    background-color: #D8698E;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s;
+}
+
+button[type="table-button"] {
+    margin-right: 30px;
+    background-color: transparent;
+    color: #48494c;
 }

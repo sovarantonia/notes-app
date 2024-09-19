@@ -1,4 +1,5 @@
 import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 const API_URL = 'http://localhost:8080';
 
@@ -151,7 +152,7 @@ export const deleteNote = async (noteId) => {
 
 export const updateNote = async (noteId, userId, title, text, date, grade) => {
     try {
-        const response = await api.patch(`/notes/${noteId}`, {data: userId, title, text, date, grade});
+        const response = await api.patch(`/notes/${noteId}`, {userId, title, text, grade, date});
         return response.data;
     } catch (error) {
         console.error('Error response:', error);
@@ -165,8 +166,19 @@ export const updateNote = async (noteId, userId, title, text, date, grade) => {
 
 export const downloadNote = async (noteId, fileType) => {
     try {
-        const response = await api.get(`/notes/${noteId}/download`, {params: fileType});
-        return response.data;
+        const response = await api.get(`/notes/${noteId}/download`, {
+            params: { type: fileType },
+            responseType: 'blob', // Ensure binary data (file)
+        });
+
+        const contentDisposition = response.headers['content-disposition'];
+
+        const fileName = contentDisposition
+            ? contentDisposition.split('filename=')[1].replace(/['"]/g, '')
+            : `note.${fileType}`;
+
+        fileDownload(response.data, fileName);
+
     } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {

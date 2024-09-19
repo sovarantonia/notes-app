@@ -1,4 +1,4 @@
-input {
+input[type="search-text"] {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -17,7 +17,7 @@ button {
     transition: background-color 0.3s;
 }
 
-button.deactivated {
+button.disabled {
     background-color: #D3D3D3; /* Light gray for deactivated state */
     color: #a1a1a1; /* Gray text color */
     cursor: not-allowed; /* Indicate that the button is not clickable */

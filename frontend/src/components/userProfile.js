@@ -22,12 +22,10 @@ const UserProfile = () => {
         setIsPopupOpen(true);
     };
 
-    // Close the popup without taking any action
     const closePopup = () => {
         setIsPopupOpen(false);
     };
 
-    // Handle account deletion logic here
     const handleDeleteAccount = async () => {
         setIsPopupOpen(false);
         try {

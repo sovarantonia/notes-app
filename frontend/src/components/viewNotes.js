@@ -51,7 +51,7 @@ const ViewNotes = () => {
                     onChange={handleTitleChange}
                 />
                 {error && <div className="error" aria-live="assertive">{error}</div>}
-                <PaginatedTable data={notes} />
+                <PaginatedTable data={notes} fetchNotes={fetchNotes} />
             </div>
         </div>
     );
