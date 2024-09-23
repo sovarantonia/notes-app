@@ -91,7 +91,7 @@ class NoteControllerTest {
         noteRequestDto.setGrade(9);
 
         UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
-        NoteResponseDto noteResponseDto = new NoteResponseDto(userResponseDto, note.getTitle(), note.getText(), note.getDate(), note.getGrade());
+        NoteResponseDto noteResponseDto = new NoteResponseDto(userResponseDto, note.getId(), note.getTitle(), note.getText(), note.getDate(), note.getGrade());
 
         String requestBody = "{ \"title\": \"A title\", \"text\": \"Some text\", \"date\": \"05-05-2024\", \"grade\": 9}";
 
@@ -141,7 +141,7 @@ class NoteControllerTest {
     void testGetNoteById() throws Exception {
         Long id = 1L;
         UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
-        NoteResponseDto noteResponseDto = new NoteResponseDto(userResponseDto, note.getTitle(), note.getText(), note.getDate(), note.getGrade());
+        NoteResponseDto noteResponseDto = new NoteResponseDto(userResponseDto, note.getId(), note.getTitle(), note.getText(), note.getDate(), note.getGrade());
 
         when(noteService.getNoteById(id)).thenReturn(Optional.of(note));
         when(mapper.toDto(note)).thenReturn(noteResponseDto);
@@ -223,7 +223,7 @@ class NoteControllerTest {
         Long id = 1L;
         UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto noteResponseDto
-                = new NoteResponseDto(userResponseDto, "New title", "Add new text", note.getDate(), 7);
+                = new NoteResponseDto(userResponseDto, 1L , "New title", "Add new text", note.getDate(), 7);
 
         String requestBody = "{ \"title\": \"New title\", \"text\": \"Add new text\", \"date\": \"05-05-2024\", \"grade\": 7}";
 
@@ -282,10 +282,10 @@ class NoteControllerTest {
 
         UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto noteResponseDto
-                = new NoteResponseDto(userResponseDto, note.getTitle(), note.getText(), note.getDate(), note.getGrade());
+                = new NoteResponseDto(userResponseDto, 1L, note.getTitle(), note.getText(), note.getDate(), note.getGrade());
         NoteResponseDto secondNoteResponseDto
                 = new NoteResponseDto
-                (userResponseDto, secondNote.getTitle(), secondNote.getText(), secondNote.getDate(), secondNote.getGrade());
+                (userResponseDto, 2L, secondNote.getTitle(), secondNote.getText(), secondNote.getDate(), secondNote.getGrade());
 
         List<Note> notes = List.of(secondNote, note);
 
@@ -331,7 +331,7 @@ class NoteControllerTest {
         UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
         NoteResponseDto secondNoteResponseDto
                 = new NoteResponseDto
-                (userResponseDto, secondNote.getTitle(), secondNote.getText(), secondNote.getDate(), secondNote.getGrade());
+                (userResponseDto, secondNote.getId(), secondNote.getTitle(), secondNote.getText(), secondNote.getDate(), secondNote.getGrade());
 
         List<Note> notes = List.of(secondNote);
 
@@ -421,7 +421,7 @@ class NoteControllerTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         mockMvc.perform(get("/notes/{id}/download", id)
-                .param("type", FileType.pdf.toString()))
+                        .param("type", FileType.pdf.toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().bytes(fileContent));
 
