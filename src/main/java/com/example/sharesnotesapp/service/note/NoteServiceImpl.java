@@ -10,7 +10,6 @@ import com.example.sharesnotesapp.repository.UserRepository;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -25,11 +24,8 @@ import javax.persistence.EntityNotFoundException;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,6 +109,11 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> getLatestNotes(User user) {
         return noteRepository.getFirst5ByUserOrderByDateDesc(user);
+    }
+
+    @Override
+    public List<Note> getNotesBetweenDates(LocalDate startDate, LocalDate endDate) {
+        return noteRepository.getNotesByDateBetweenOrderByDateDesc(startDate, endDate);
     }
 
     @Override

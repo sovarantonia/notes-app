@@ -8,6 +8,7 @@ import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
 import com.example.sharesnotesapp.model.dto.response.NoteResponseDto;
 import com.example.sharesnotesapp.service.note.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -113,6 +115,21 @@ public class NoteController {
             List<Note> latestNotes = noteService.getLatestNotes(user);
 
             return ResponseEntity.ok(latestNotes.stream().map(mapper::toDto).toList());
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/dates")
+    public ResponseEntity<List<NoteResponseDto>> getNotesBetweenDates
+            (@RequestParam("startDate") @DateTimeFormat(fallbackPatterns = "dd-MM-yyyy") LocalDate startDate,
+             @RequestParam("endDate") @DateTimeFormat(fallbackPatterns = "dd-MM-yyyy") LocalDate endDate){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
+            List<Note> notes = noteService.getNotesBetweenDates(startDate, endDate);
+
+            return ResponseEntity.ok(notes.stream().map(mapper::toDto).toList());
         }
 
         return ResponseEntity.badRequest().build();

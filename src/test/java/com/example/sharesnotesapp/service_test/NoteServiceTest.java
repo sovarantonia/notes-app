@@ -358,6 +358,93 @@ class NoteServiceTest {
         assertTrue(headers.getContentLength() > 0);
         assertTrue(headers.getContentDisposition().toString().contains("filename=\"note_A title"));
     }
+
+    @Test
+    void testGetLatestNotes(){
+        Note note2 = Note
+                .builder()
+                .id(2L)
+                .title("Title2")
+                .text("Text2")
+                .date(LocalDate.parse("2024-04-08"))
+                .grade(7)
+                .user(user)
+                .build();
+
+        Note note3 = Note
+                .builder()
+                .id(3L)
+                .title("Title2")
+                .text("Text2")
+                .date(LocalDate.parse("2024-04-07"))
+                .grade(7)
+                .user(user)
+                .build();
+
+        Note note4 = Note
+                .builder()
+                .id(4L)
+                .title("Title2")
+                .text("Text2")
+                .date(LocalDate.parse("2024-04-06"))
+                .grade(7)
+                .user(user)
+                .build();
+
+        Note note5 = Note
+                .builder()
+                .id(5L)
+                .title("Title2")
+                .text("Text2")
+                .date(LocalDate.parse("2024-04-05"))
+                .grade(7)
+                .user(user)
+                .build();
+
+
+        when(noteRepository.getFirst5ByUserOrderByDateDesc(user)).thenReturn(List.of(note, note2, note3, note4, note5));
+
+        List<Note> latestNotes = noteService.getLatestNotes(user);
+        assertEquals(latestNotes.get(0), note);
+        assertEquals(latestNotes.get(1), note2);
+        assertEquals(latestNotes.get(2), note3);
+        assertEquals(latestNotes.get(3), note4);
+        assertEquals(latestNotes.get(4), note5);
+    }
+
+    @Test
+    void testGetNotesBetweenDate(){
+        Note note2 = Note
+                .builder()
+                .id(2L)
+                .title("Title2")
+                .text("Text2")
+                .date(LocalDate.parse("2024-04-08"))
+                .grade(7)
+                .user(user)
+                .build();
+
+        Note note3 = Note
+                .builder()
+                .id(3L)
+                .title("Title2")
+                .text("Text2")
+                .date(LocalDate.parse("2024-04-07"))
+                .grade(7)
+                .user(user)
+                .build();
+
+        LocalDate startDate = LocalDate.parse("2024-04-01");
+        LocalDate endDate = LocalDate.parse("2024-04-10");
+
+        when(noteRepository.getNotesByDateBetweenOrderByDateDesc(startDate, endDate))
+                .thenReturn(List.of(note2, note3));
+
+        List<Note> notes = noteService.getNotesBetweenDates(startDate, endDate);
+
+        assertEquals(notes.get(0), note2);
+        assertEquals(notes.get(1), note3);
+    }
 }
 
 

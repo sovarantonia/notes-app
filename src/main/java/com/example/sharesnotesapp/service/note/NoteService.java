@@ -8,6 +8,7 @@ import com.itextpdf.text.DocumentException;
 import org.springframework.http.HttpHeaders;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,8 @@ public interface NoteService {
     List<Note> getFilteredNotesByTitle(User user, String string);
 
     List<Note> getLatestNotes(User user);
+
+    List<Note> getNotesBetweenDates(LocalDate startDate, LocalDate endDate);
 
     HttpHeaders downloadNote(Note note, FileType type);
 
