@@ -11,6 +11,7 @@ import com.example.sharesnotesapp.service.user.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +26,6 @@ import java.net.URI;
 
 @RestController
 @RequestMapping
-@RequiredArgsConstructor
 @Getter
 public class AuthController {
     private final UserService userService;
@@ -33,7 +33,13 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserMapper mapper;
 
-
+    @Autowired
+    public AuthController(UserService userService, JwtUtils jwtUtils, AuthenticationManager authenticationManager, UserMapper mapper) {
+        this.userService = userService;
+        this.jwtUtils = jwtUtils;
+        this.authenticationManager = authenticationManager;
+        this.mapper = mapper;
+    }
     @PostMapping("/register")
     public ResponseEntity<User> createAccount(@Valid @RequestBody UserRequestDto userRequestDto) {
         URI uri = URI.create((ServletUriComponentsBuilder.fromCurrentContextPath().path("/register").toUriString()));

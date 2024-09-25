@@ -11,4 +11,5 @@ import java.util.List;
 public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> getNotesByUserOrderByDateDesc(User user);
     List<Note> findAllByUserAndTitleContainsIgnoreCaseOrderByDateDesc(User user, String string);
+    List<Note> getFirst5ByUserOrderByDateDesc(User user);
 }

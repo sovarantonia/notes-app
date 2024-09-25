@@ -7,10 +7,11 @@ import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
 import com.example.sharesnotesapp.repository.NoteRepository;
 import com.example.sharesnotesapp.repository.UserRepository;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfDocument;
+import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -24,6 +25,8 @@ import javax.persistence.EntityNotFoundException;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -108,34 +111,40 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public List<Note> getLatestNotes(User user) {
+        return noteRepository.getFirst5ByUserOrderByDateDesc(user);
+    }
+
+    @Override
     public HttpHeaders downloadNote(Note note, FileType type) {
         HttpHeaders headers = new HttpHeaders();
         String filename = "note_" + note.getTitle() + "_" + note.getDate() + ".";
 
-        if (type.equals(FileType.txt)) {
-            headers.setContentType(MediaType.TEXT_PLAIN);
-            headers.setContentLength(createTextFileContent(note).getBytes().length);
-            headers.setContentDisposition(ContentDisposition
-                    .attachment()
-                    .filename(filename.concat(FileType.txt.toString()))
-                    .build());
+            if (type.equals(FileType.txt)) {
+                headers.setContentType(MediaType.TEXT_PLAIN);
+                headers.setContentLength(createTextFileContent(note).getBytes().length);
+                headers.setContentDisposition(ContentDisposition
+                        .attachment()
+                        .filename(filename.concat(FileType.txt.toString()))
+                        .build());
 
-        } else if (type.equals(FileType.pdf)) {
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentLength(createPdfContent(note).length);
-            headers.setContentDisposition(ContentDisposition
-                    .attachment()
-                    .filename(filename.concat(FileType.pdf.toString()))
-                    .build());
+            } else if (type.equals(FileType.pdf)) {
 
-        } else if (type.equals(FileType.docx)) {
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentLength(createDocxContent(note).length);
-            headers.setContentDisposition(ContentDisposition
-                    .attachment()
-                    .filename(filename.concat(FileType.docx.toString()))
-                    .build());
-        }
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentLength(createPdfContent(note).length);
+                headers.setContentDisposition(ContentDisposition
+                        .attachment()
+                        .filename(filename.concat(FileType.pdf.toString()))
+                        .build());
+
+            } else if (type.equals(FileType.docx)) {
+                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                headers.setContentLength(createDocxContent(note).length);
+                headers.setContentDisposition(ContentDisposition
+                        .attachment()
+                        .filename(filename.concat(FileType.docx.toString()))
+                        .build());
+            }
 
         return headers;
     }
@@ -149,21 +158,30 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public byte[] createPdfContent(Note note) {
+    public byte[] createPdfContent(Note note){
+        Document document = new Document();
+        byte[] pdfBytes;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
-        PdfDocument pdfDoc = new PdfDocument(writer);
-        Document document = new Document(pdfDoc);
+        try{
+            PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
 
-        document.add(new Paragraph("Title: " + note.getTitle()));
-        document.add(new Paragraph("Date: " + note.getDate()));
-        document.add(new Paragraph("Content:"));
-        document.add(new Paragraph(note.getText()));
-        document.add(new Paragraph("Grade: " + note.getGrade()));
+            document.open();
 
-        document.close();
+            document.add(new Paragraph("Title: " + note.getTitle()));
+            document.add(new Paragraph("Date: " + note.getDate()));
+            document.add(new Paragraph("Content:"));
+            document.add(new Paragraph(note.getText()));
+            document.add(new Paragraph("Grade: " + note.getGrade()));
 
-        return byteArrayOutputStream.toByteArray();
+            document.close();
+            writer.close();
+
+            pdfBytes = byteArrayOutputStream.toByteArray();
+        } catch (DocumentException e) {
+            throw new RuntimeException("Error creating pdf document", e);
+        }
+
+        return pdfBytes;
     }
 
     @Override

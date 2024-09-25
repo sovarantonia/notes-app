@@ -9,10 +9,9 @@ import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
 import com.example.sharesnotesapp.model.dto.response.NoteResponseDto;
 import com.example.sharesnotesapp.model.dto.response.UserResponseDto;
 import com.example.sharesnotesapp.service.note.NoteServiceImpl;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -394,15 +393,16 @@ class NoteControllerTest {
         String filename = "note_" + note.getTitle() + "_" + note.getDate() + ".";
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
-        PdfDocument pdfDoc = new PdfDocument(writer);
-        Document document = new Document(pdfDoc);
+
+        Document document = new Document();
+        PdfWriter.getInstance(document, byteArrayOutputStream);
+        document.open();
         document.add(new Paragraph("Title: " + note.getTitle()));
         document.add(new Paragraph("Date: " + note.getDate()));
         document.add(new Paragraph("Content:"));
         document.add(new Paragraph(note.getText()));
         document.add(new Paragraph("Grade: " + note.getGrade()));
-        document.close();
+
 
         byte[] fileContent = byteArrayOutputStream.toByteArray();
 

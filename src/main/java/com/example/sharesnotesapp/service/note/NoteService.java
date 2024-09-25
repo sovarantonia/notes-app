@@ -4,6 +4,7 @@ import com.example.sharesnotesapp.model.FileType;
 import com.example.sharesnotesapp.model.Note;
 import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.request.NoteRequestDto;
+import com.itextpdf.text.DocumentException;
 import org.springframework.http.HttpHeaders;
 
 
@@ -23,11 +24,13 @@ public interface NoteService {
 
     List<Note> getFilteredNotesByTitle(User user, String string);
 
-    HttpHeaders downloadNote(Note note, FileType type);
+    List<Note> getLatestNotes(User user);
+
+    HttpHeaders downloadNote(Note note, FileType type) throws DocumentException;
 
     String createTextFileContent(Note note);
 
-    byte[] createPdfContent(Note note);
+    byte[] createPdfContent(Note note) throws DocumentException;
 
     byte[] createDocxContent(Note note);
 }

@@ -2,7 +2,9 @@ package com.example.sharesnotesapp.controller_test;
 
 import com.example.sharesnotesapp.controller.AuthController;
 import com.example.sharesnotesapp.model.User;
+import com.example.sharesnotesapp.model.dto.mapper.UserMapper;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
+import com.example.sharesnotesapp.model.dto.response.UserResponseDto;
 import com.example.sharesnotesapp.security.jwt.JwtUtils;
 import com.example.sharesnotesapp.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +42,9 @@ class AuthControllerTest {
 
     @MockBean
     private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private UserMapper mapper;
     private User user;
 
     @BeforeEach
@@ -117,6 +122,8 @@ class AuthControllerTest {
         String token = "my-token";
         String loginJson = "{ \"email\": \"email@test.com\", \"password\": \"test123\"}";
 
+        UserResponseDto userResponseDto = new UserResponseDto(1L, "a", "b", "email@test.com");
+
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, password, Collections.emptyList());
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -124,11 +131,15 @@ class AuthControllerTest {
 
         when(jwtUtils.generateJwtCookie(any(User.class))).thenReturn(token);
 
+        when(mapper.toDto(user)).thenReturn(userResponseDto);
+
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(loginJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", is(email)))
+                .andExpect(jsonPath("$.userInfo.email", is(email)))
+                .andExpect(jsonPath("$.userInfo.firstName", is("a")))
+                .andExpect(jsonPath("$.userInfo.lastName", is("b")))
                 .andExpect(jsonPath("$.tokenValue", is(token)));
     }
 

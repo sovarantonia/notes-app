@@ -106,6 +106,18 @@ public class NoteController {
         return ResponseEntity.badRequest().build();
     }
 
+    @GetMapping("/latest")
+    public ResponseEntity<List<NoteResponseDto>> getLatestNotes(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user) {
+            List<Note> latestNotes = noteService.getLatestNotes(user);
+
+            return ResponseEntity.ok(latestNotes.stream().map(mapper::toDto).toList());
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> downloadNote(@PathVariable Long id, @RequestParam String type) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
