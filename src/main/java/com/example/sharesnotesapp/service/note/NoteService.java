@@ -26,11 +26,11 @@ public interface NoteService {
 
     List<Note> getLatestNotes(User user);
 
-    HttpHeaders downloadNote(Note note, FileType type) throws DocumentException;
+    HttpHeaders downloadNote(Note note, FileType type);
 
     String createTextFileContent(Note note);
 
-    byte[] createPdfContent(Note note) throws DocumentException;
+    byte[] createPdfContent(Note note);
 
     byte[] createDocxContent(Note note);
 }

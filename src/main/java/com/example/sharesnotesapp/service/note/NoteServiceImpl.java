@@ -44,7 +44,7 @@ public class NoteServiceImpl implements NoteService {
     public Note saveNote(Long userId, NoteRequestDto noteRequestDto) {
         User associatedUser = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
 
-        if(noteRequestDto.getGrade() == null){
+        if (noteRequestDto.getGrade() == null) {
             throw new IllegalArgumentException("Grade must be an integer between 1 and 10");
         }
 
@@ -120,31 +120,31 @@ public class NoteServiceImpl implements NoteService {
         HttpHeaders headers = new HttpHeaders();
         String filename = "note_" + note.getTitle() + "_" + note.getDate() + ".";
 
-            if (type.equals(FileType.txt)) {
-                headers.setContentType(MediaType.TEXT_PLAIN);
-                headers.setContentLength(createTextFileContent(note).getBytes().length);
-                headers.setContentDisposition(ContentDisposition
-                        .attachment()
-                        .filename(filename.concat(FileType.txt.toString()))
-                        .build());
+        if (type.equals(FileType.txt)) {
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            headers.setContentLength(createTextFileContent(note).getBytes().length);
+            headers.setContentDisposition(ContentDisposition
+                    .attachment()
+                    .filename(filename.concat(FileType.txt.toString()))
+                    .build());
 
-            } else if (type.equals(FileType.pdf)) {
+        } else if (type.equals(FileType.pdf)) {
 
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentLength(createPdfContent(note).length);
-                headers.setContentDisposition(ContentDisposition
-                        .attachment()
-                        .filename(filename.concat(FileType.pdf.toString()))
-                        .build());
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentLength(createPdfContent(note).length);
+            headers.setContentDisposition(ContentDisposition
+                    .attachment()
+                    .filename(filename.concat(FileType.pdf.toString()))
+                    .build());
 
-            } else if (type.equals(FileType.docx)) {
-                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-                headers.setContentLength(createDocxContent(note).length);
-                headers.setContentDisposition(ContentDisposition
-                        .attachment()
-                        .filename(filename.concat(FileType.docx.toString()))
-                        .build());
-            }
+        } else if (type.equals(FileType.docx)) {
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentLength(createDocxContent(note).length);
+            headers.setContentDisposition(ContentDisposition
+                    .attachment()
+                    .filename(filename.concat(FileType.docx.toString()))
+                    .build());
+        }
 
         return headers;
     }
@@ -158,13 +158,12 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public byte[] createPdfContent(Note note){
+    public byte[] createPdfContent(Note note) {
         Document document = new Document();
         byte[] pdfBytes;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try{
-            PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
-
+        try {
+            PdfWriter.getInstance(document, byteArrayOutputStream);
             document.open();
 
             document.add(new Paragraph("Title: " + note.getTitle()));
@@ -174,11 +173,9 @@ public class NoteServiceImpl implements NoteService {
             document.add(new Paragraph("Grade: " + note.getGrade()));
 
             document.close();
-            writer.close();
-
             pdfBytes = byteArrayOutputStream.toByteArray();
         } catch (DocumentException e) {
-            throw new RuntimeException("Error creating pdf document", e);
+            throw new RuntimeException("Error creating PDF document", e);
         }
 
         return pdfBytes;
