@@ -1,0 +1,83 @@
+.dialog-content {
+    padding: 20px;
+}
+
+.dialog-content h2 {
+    margin-bottom: 20px;
+}
+
+.dialog-content .error {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.MuiTextField-root {
+    margin-bottom: 20px !important;
+}
+
+.MuiOutlinedInput-root {
+    border-radius: 8px;
+}
+
+.MuiInputLabel-root {
+    color: #D8698E;
+}
+
+.MuiInputLabel-root.Mui-focused {
+    color: #D8698E;
+}
+
+.MuiInputLabel-root.MuiInputLabel-shrink {
+    color: #7d3e53;
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border-color: #D8698E;
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #D8698E;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #7d3e53 !important;
+}
+
+.MuiFormControl-root {
+    margin-bottom: 20px;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.dialog-buttons .MuiButton-root {
+    margin-top: 20px;
+    margin-left: 15px;
+    margin-right: 10px;
+}
+
+.dialog-buttons .MuiButton-containedPrimary {
+    background-color: #2db34b;
+    color: white;
+}
+
+.dialog-buttons .MuiButton-containedPrimary:hover {
+    background-color: #218838;
+}
+
+.dialog-buttons .MuiButton-outlinedSecondary {
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.dialog-buttons .MuiButton-outlinedSecondary:hover {
+    background-color: rgba(244, 67, 54, 0.1);
+    border-color: #e53935;
+}
+
+.MuiFormLabel-root {
+    color: #5e2d3e !important;
+}
+

@@ -25,7 +25,6 @@
     transition: background-color 0.3s;
 }
 
-/* For consistency with other buttons */
 .form button[type="button"][type="cancel"] {
     background-color: #D3D3D3;
 }

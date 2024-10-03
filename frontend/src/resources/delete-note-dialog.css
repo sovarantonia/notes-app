@@ -1,0 +1,36 @@
+.delete-note-dialog .dialog-content {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.delete-note-dialog .dialog-content h2 {
+    margin-bottom: 20px;
+}
+
+.delete-note-dialog .dialog-content .error {
+    color: #f44336;
+    margin-bottom: 20px;
+}
+
+.delete-note-dialog .dialog-content p {
+    font-size: large;
+}
+
+.delete-note-dialog .dialog-buttons .MuiButton-containedPrimary {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-note-dialog .dialog-buttons .MuiButton-containedPrimary:hover {
+    background-color: #bf342a;
+}
+
+.delete-note-dialog .dialog-buttons .MuiButton-outlinedSecondary {
+    border-color: #2db34b;
+    color: #2db34b;
+}
+
+.delete-note-dialog .dialog-buttons .MuiButton-outlinedSecondary:hover {
+    background-color: rgba(45, 179, 75, 0.1);
+    border-color: #2db34b;
+}

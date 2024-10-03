@@ -188,3 +188,31 @@ export const downloadNote = async (noteId, fileType) => {
         }
     }
 }
+
+export const latestNotes = async () => {
+    try {
+        const response = await api.get('/notes/latest');
+        return response.data;
+    }catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the notes');
+        }
+    }
+}
+
+export const getNotesBetweenDates = async (startDate, endDate) => {
+    try {
+        const response = await api.get('/notes/dates', {params: {startDate: startDate, endDate: endDate}});
+        return response.data;
+    }catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the notes');
+        }
+    }
+}

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import "../resources/table.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDownload, faPenToSquare, faShare, faTrashCan} from "@fortawesome/free-solid-svg-icons";
-import UpdateDialog from "./updateDialog";
+import {faDownload, faPenToSquare, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import UpdateNoteDialog from "./updateNoteDialog";
 import DeleteNoteDialog from "./deleteNoteDialog";
 import DownloadDialog from "./downloadDialog";
 
@@ -73,10 +73,6 @@ const PaginatedTable = ({data, fetchNotes}) => {
                                 <FontAwesomeIcon icon={faDownload} size="xl"/>
                             </button>
 
-                            <button type="table-button" title="Share">
-                                <FontAwesomeIcon icon={faShare} size="xl"/>
-                            </button>
-
                             <button type="table-button" title="Delete"
                                     onClick={() => handleOpenDialog(item.id, "delete-dialog")}>
                                 <FontAwesomeIcon icon={faTrashCan} size="xl"/>
@@ -89,7 +85,7 @@ const PaginatedTable = ({data, fetchNotes}) => {
             </table>
 
             {selectedNoteId !== null && (
-                <UpdateDialog
+                <UpdateNoteDialog
                     open={open && activeDialog === "update-dialog"}
                     onClose={handleCloseDialog}
                     noteId={selectedNoteId}

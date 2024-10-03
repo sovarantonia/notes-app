@@ -1,0 +1,54 @@
+.download-dialog .dialog-content {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.download-dialog .dialog-content h2 {
+    margin-bottom: 20px;
+}
+
+.download-dialog .dialog-content .error {
+    color: #f44336;
+    margin-bottom: 20px;
+}
+
+.download-dialog .MuiFormControl-root {
+    margin-bottom: 20px;
+}
+
+.download-dialog .MuiRadio-root {
+    color: #5e2d3e;
+}
+
+.download-dialog .MuiRadio-root.Mui-checked {
+    color: #7d3e53 !important;
+}
+
+.download-dialog .MuiButton-root {
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.download-dialog .dialog-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.download-dialog .dialog-buttons .MuiButton-root {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.download-dialog .MuiFormLabel-root {
+    color: #5e2d3e !important;
+}
+
+.download-dialog .Mui-focused {
+    color: #5e2d3e !important;
+}
+
+.download-dialog .MuiDialog-paperWidthSm {
+    max-width: 400px;
+}

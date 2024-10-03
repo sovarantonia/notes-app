@@ -9,6 +9,7 @@ import {UserProvider} from "./components/userContext";
 import ProtectedRoute from "./components/protectedRoute";
 import UserProfile from "./components/userProfile";
 import ViewNotes from "./components/viewNotes";
+import AboutPage from "./components/about";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/" element={<LandingPage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
+                    <Route path="/about" element={<AboutPage/>}/>
                     <Route
                         path="/home"
                         element={<ProtectedRoute element={HomePage}/>}

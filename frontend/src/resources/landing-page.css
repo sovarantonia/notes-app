@@ -1,0 +1,50 @@
+body {
+    background-image: url("landing-page.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    height: 100vh;
+}
+
+.landingPageContainer {
+    padding-top: 60px;
+    text-align: center;
+
+}
+
+.contentContainer {
+    margin-top: 40px;
+}
+
+h1 {
+    font-size: 36px;
+    color: #7d3e53;
+}
+
+p {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.authLinks {
+    margin-top: 30px;
+}
+
+.authLinks a {
+    margin: 0 15px;
+    font-size: 20px;
+    color: #7d3e53;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 2px solid #7d3e53;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.authLinks a:hover {
+    background-color: #7d3e53;
+    color: #fff;
+}

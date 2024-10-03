@@ -10,6 +10,8 @@ import {useUser} from "./userContext";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import '../resources/create-note.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCalendarPlus, faPlus} from "@fortawesome/free-solid-svg-icons";
 
 const CreateNotePage = ({onLogout}) => {
     const [error, setError] = useState('');
@@ -96,6 +98,7 @@ const CreateNotePage = ({onLogout}) => {
                                 selected={date}
                                 onChange={(date) => setDate(date)}
                             />
+
                         </div>
 
                         <div className="form-group">
@@ -109,7 +112,7 @@ const CreateNotePage = ({onLogout}) => {
                             />
                         </div>
 
-                        <button type="submit">Submit</button>
+                        <button type="submit"><FontAwesomeIcon icon={faPlus}/>Submit</button>
                     </form>
                 </div>
             </div>

@@ -5,6 +5,8 @@ import {useState} from 'react';
 import {deleteAccount, updateUserCredentials} from "./api";
 import ConfirmDeletePopup from "./deletePopup";
 import '../resources/delete-popup.css'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSave, faUserSlash} from "@fortawesome/free-solid-svg-icons";
 
 const UserProfile = () => {
     const [error, setError] = useState('');
@@ -102,8 +104,14 @@ const UserProfile = () => {
                             required
                         />
                     </div>
-                    <button type="submit" onClick={handleSubmit}>Update</button>
-                    <button type="button" onClick={openPopup} className="delete-acc-btn">Delete account</button>
+                    <button type="submit" onClick={handleSubmit}>
+                        <FontAwesomeIcon icon={faSave}/>Update
+                    </button>
+
+                    <button type="button" onClick={openPopup} className="delete-acc-btn">
+                        <FontAwesomeIcon icon={faUserSlash} />Delete account
+                    </button>
+
                     <ConfirmDeletePopup
                         isOpen={isPopupOpen}
                         onClose={closePopup}

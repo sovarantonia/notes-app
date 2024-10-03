@@ -6,6 +6,7 @@
     width: 250px;
     background-color: rgba(216, 105, 142, 0.8);
     padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h2 {
@@ -16,21 +17,65 @@
 .sidebar ul {
     list-style-type: none;
     padding: 0;
-}
-
-.sidebar ul li {
-    padding: 10px;
     text-align: center;
 }
 
-.sidebar ul li a {
+.sidebar-elements li {
+    padding-top: 2px;
+    position: relative;
+}
+
+.sidebar-elements li:last-child{
+    padding-bottom: 10px;
+}
+
+.sidebar-elements li::after {
+    content: '';
+    width: 0%;
+    height: 1px;
+    background: #7d3e53;
+    display: block;
+    margin: auto;
+    transition: width 0.5s ease;
+}
+
+.sidebar-elements li:hover::after {
+    width: 80%;
+}
+
+.sidebar-elements li a {
+    color: black;
     text-decoration: none;
-    color: #333;
+    font-size: 20px;
+    display: block;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.sidebar-elements li a:hover {
+    color: white;
+}
+
+.sidebar ul li a,
+.sidebar ul li button {
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+    display: block;
+    transition: color 0.3s ease;
+    padding-top: 20px;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li button:hover {
+    color: white;
 }
 
 .sidebar ul li button {
     background: none;
-    color: black;
+    border: none;
     cursor: pointer;
-    font-size: 20px;
+    width: 100%;
+    text-align: center;
 }

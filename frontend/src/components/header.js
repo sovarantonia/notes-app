@@ -39,12 +39,20 @@ export default function ButtonAppBar() {
                             <MenuItem component={Link} href="/" onClick={handleClose}>
                                 Home
                             </MenuItem>
+
+                            <MenuItem component={Link} href="/About" onClick={handleClose}>
+                                About
+                            </MenuItem>
+
                             <MenuItem component={Link} href="/Login" onClick={handleClose}>
                                 Login
                             </MenuItem>
+
                             <MenuItem component={Link} href="/Register" onClick={handleClose}>
                                 Register
                             </MenuItem>
+
+
 
                         </Menu>
 
