@@ -1,17 +1,16 @@
 import Sidebar from "./sidebar";
 import React from "react";
 import {useState} from 'react';
-import moment from 'moment';
 import DatePicker from "react-datepicker";
 import {note} from "./api";
-
 import "react-datepicker/dist/react-datepicker.css";
 import {useUser} from "./userContext";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import '../resources/create-note.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCalendarPlus, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {format} from "date-fns";
 
 const CreateNotePage = ({onLogout}) => {
     const [error, setError] = useState('');
@@ -38,7 +37,7 @@ const CreateNotePage = ({onLogout}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formattedDate = moment(date).format('DD-MM-yyyy');
+        const formattedDate = format(date, 'dd-MM-yyyy');
         if (!title) {
             setError('Enter a title');
             return;
@@ -97,6 +96,7 @@ const CreateNotePage = ({onLogout}) => {
                                 maxDate={new Date()}
                                 selected={date}
                                 onChange={(date) => setDate(date)}
+                                calendarStartDay={1}
                             />
 
                         </div>

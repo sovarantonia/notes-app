@@ -5,6 +5,7 @@ import {useUser} from "./userContext";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {latestNotes} from "./api";
 import "../resources/table.css";
+import NotesChart from "./notesChart";
 const HomePage = () => {
     const { logout } = useUser();
 
@@ -22,7 +23,6 @@ const HomePage = () => {
         }catch (error){
             setError('Error retrieving the notes')
         }
-
     }
 
     useEffect(() => {
@@ -33,6 +33,7 @@ const HomePage = () => {
         <div className="home-page">
             <Sidebar onLogout={handleLogout}/>
             <div className="main-content">
+                <NotesChart/>
                 {error && <div className="error" aria-live="assertive">{error}</div>}
                 <h2>Latest notes</h2>
                 <TableContainer>
@@ -59,6 +60,8 @@ const HomePage = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+
             </div>
         </div>
     );

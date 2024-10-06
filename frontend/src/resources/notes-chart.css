@@ -1,0 +1,28 @@
+.datepicker-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.rounded-datepicker {
+    border-radius: 7px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-datepicker input {
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.barchart-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.barchart-container .MuiBar-root {
+    stroke-width: 1;
+    stroke: white;
+}
