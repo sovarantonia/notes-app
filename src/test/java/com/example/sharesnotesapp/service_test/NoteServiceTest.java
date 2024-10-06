@@ -437,13 +437,13 @@ class NoteServiceTest {
         LocalDate startDate = LocalDate.parse("2024-04-01");
         LocalDate endDate = LocalDate.parse("2024-04-10");
 
-        when(noteRepository.getNotesByDateBetweenOrderByDateDesc(startDate, endDate))
-                .thenReturn(List.of(note2, note3));
+        when(noteRepository.getNotesByDateBetweenOrderByDateAsc(startDate, endDate))
+                .thenReturn(List.of(note3, note2));
 
         List<Note> notes = noteService.getNotesBetweenDates(startDate, endDate);
 
-        assertEquals(notes.get(0), note2);
-        assertEquals(notes.get(1), note3);
+        assertEquals(notes.get(0), note3);
+        assertEquals(notes.get(1), note2);
     }
 }
 

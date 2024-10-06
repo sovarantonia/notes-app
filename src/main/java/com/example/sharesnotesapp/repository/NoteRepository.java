@@ -13,5 +13,5 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> getNotesByUserOrderByDateDesc(User user);
     List<Note> findAllByUserAndTitleContainsIgnoreCaseOrderByDateDesc(User user, String string);
     List<Note> getFirst5ByUserOrderByDateDesc(User user);
-    List<Note> getNotesByDateBetweenOrderByDateDesc(LocalDate startDate, LocalDate endDate);
+    List<Note> getNotesByDateBetweenOrderByDateAsc(LocalDate startDate, LocalDate endDate);
 }

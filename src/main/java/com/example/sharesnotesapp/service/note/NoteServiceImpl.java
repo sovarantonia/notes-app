@@ -113,7 +113,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> getNotesBetweenDates(LocalDate startDate, LocalDate endDate) {
-        return noteRepository.getNotesByDateBetweenOrderByDateDesc(startDate, endDate);
+        return noteRepository.getNotesByDateBetweenOrderByDateAsc(startDate, endDate);
     }
 
     @Override
