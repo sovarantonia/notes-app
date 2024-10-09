@@ -3,6 +3,7 @@ package com.example.sharesnotesapp.service.request;
 import com.example.sharesnotesapp.model.Request;
 import com.example.sharesnotesapp.model.Status;
 import com.example.sharesnotesapp.model.User;
+import com.example.sharesnotesapp.model.dto.request.RequestRequestDto;
 import com.example.sharesnotesapp.repository.RequestRepository;
 import com.example.sharesnotesapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,30 +15,39 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RequestServiceImpl implements RequestService{
+public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
 
     @Override
-    public void sendRequest(Long senderId, Long receiverId) {
-        if(senderId.equals(receiverId)){
-            throw new IllegalArgumentException("Cannot send a request to yourself");
-        }
-        User sender = userRepository.findById(senderId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-        User receiver = userRepository.findById(receiverId).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
-
-        List<Request> existingRequests = requestRepository.getRequestsBySenderAndReceiver(sender, receiver);
-
-        if(!existingRequests.isEmpty()){
-            for(Request request : existingRequests){
-                if (request.getStatus().equals(Status.PENDING)){
+    public void checkRequests(List<Request> requests) {
+        if (!requests.isEmpty()) {
+            for (Request request : requests) {
+                if (request.getStatus().equals(Status.PENDING)) {
                     throw new IllegalArgumentException("There is already a request created");
-                }
-                else if (request.getStatus().equals(Status.ACCEPTED)){
+                } else if (request.getStatus().equals(Status.ACCEPTED)) {
                     throw new IllegalArgumentException("Cannot send another request");
                 }
             }
         }
+    }
+
+    @Override
+    public Request sendRequest(RequestRequestDto requestDto) {
+        User sender = userRepository.findById(requestDto.getSenderId())
+                .orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+        User receiver = userRepository.findUserByEmail(requestDto.getReceiverEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+
+        if (sender.getId().equals(receiver.getId())) {
+            throw new IllegalArgumentException("Cannot send a request to yourself");
+        }
+
+        List<Request> existingRequests = requestRepository.getRequestsBySenderAndReceiver(sender, receiver);
+        List<Request> requestsFromReceiver = requestRepository.getRequestsBySenderAndReceiver(receiver, sender);
+
+        checkRequests(existingRequests);
+        checkRequests(requestsFromReceiver);
 
         Request request = Request.builder()
                 .sender(sender)
@@ -45,14 +55,14 @@ public class RequestServiceImpl implements RequestService{
                 .sentAt(LocalDate.now())
                 .build();
 
-        requestRepository.save(request);
+        return requestRepository.save(request);
 
     }
 
     @Override
     public void deleteRequest(Long id) {
         Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request does not exist"));
-        if(!request.getStatus().equals(Status.PENDING)){
+        if (!request.getStatus().equals(Status.PENDING)) {
             throw new IllegalArgumentException("Cannot delete a non-pending request");
         }
 
@@ -62,7 +72,7 @@ public class RequestServiceImpl implements RequestService{
     @Override
     public void acceptRequest(Long id) {
         Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request does not exist"));
-        if(!request.getStatus().equals(Status.PENDING)){
+        if (!request.getStatus().equals(Status.PENDING)) {
             throw new IllegalArgumentException("Cannot accept a non-pending request");
         }
 
@@ -73,11 +83,22 @@ public class RequestServiceImpl implements RequestService{
     @Override
     public void declineRequest(Long id) {
         Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request does not exist"));
-        if(!request.getStatus().equals(Status.PENDING)){
+        if (!request.getStatus().equals(Status.PENDING)) {
             throw new IllegalArgumentException("Cannot decline a non-pending request");
         }
 
         request.setStatus(Status.DECLINED);
         requestRepository.save(request);
     }
+
+    @Override
+    public List<Request> getSentRequests() {
+        return null;
+    }
+
+    @Override
+    public List<Request> getReceivedRequests() {
+        return null;
+    }
+
 }

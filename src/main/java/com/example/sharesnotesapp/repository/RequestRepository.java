@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> getRequestsBySenderAndReceiver(User sender, User receiver);
+    List<Request> getRequestsBySenderOrderBySentAtDesc(User sender);
+    List<Request> getRequestsByReceiverOrderBySentAtDesc(User receiver);
 }
