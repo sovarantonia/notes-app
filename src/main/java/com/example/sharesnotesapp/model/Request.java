@@ -42,6 +42,7 @@ public class Request {
     private User receiver;
 
     @Value("PENDING")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(nullable = false)

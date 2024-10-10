@@ -257,4 +257,30 @@ public class RequestServiceTest {
         String message = "Cannot decline a non-pending request";
         assertEquals(message, exception.getMessage());
     }
+
+    @Test
+    public void testGetSentRequests(){
+        User anotherUser = new User(3L, "User", "user", "user@example.com", "test123");
+        Request anotherRequest = new Request(2L, sender, anotherUser, Status.PENDING, LocalDate.parse("2024-09-09"));
+
+        when(requestRepository.getRequestsBySenderAndStatusOrderBySentAtDesc(sender, Status.PENDING))
+                .thenReturn(List.of(request, anotherRequest));
+
+        List<Request> sentRequests = requestService.getSentRequests(sender);
+        assertEquals(request, sentRequests.get(0));
+        assertEquals(anotherRequest, sentRequests.get(1));
+    }
+
+    @Test
+    public void testGetReceivedRequests(){
+        User anotherUser = new User(3L, "User", "user", "user@example.com", "test123");
+        Request anotherRequest = new Request(2L, anotherUser, receiver, Status.PENDING, LocalDate.parse("2024-09-09"));
+
+        when(requestRepository.getRequestsByReceiverAndStatusOrderBySentAtDesc(receiver, Status.PENDING))
+                .thenReturn(List.of(request, anotherRequest));
+
+        List<Request> sentRequests = requestService.getReceivedRequests(receiver);
+        assertEquals(request, sentRequests.get(0));
+        assertEquals(anotherRequest, sentRequests.get(1));
+    }
 }

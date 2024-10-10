@@ -92,13 +92,13 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> getSentRequests() {
-        return null;
+    public List<Request> getSentRequests(User user) {
+        return requestRepository.getRequestsBySenderAndStatusOrderBySentAtDesc(user, Status.PENDING);
     }
 
     @Override
-    public List<Request> getReceivedRequests() {
-        return null;
+    public List<Request> getReceivedRequests(User user) {
+        return requestRepository.getRequestsByReceiverAndStatusOrderBySentAtDesc(user, Status.PENDING);
     }
 
 }
