@@ -14,4 +14,5 @@ public interface RequestService {
     void declineRequest(Long id);
     List<Request> getSentRequests(User user);
     List<Request> getReceivedRequests(User user);
+    Request getRequestById(Long id);
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -52,7 +53,7 @@ public class RequestServiceImpl implements RequestService {
         Request request = Request.builder()
                 .sender(sender)
                 .receiver(receiver)
-                .sentAt(LocalDate.now())
+                .sentAt(LocalDateTime.now())
                 .build();
 
         return requestRepository.save(request);
@@ -99,6 +100,12 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> getReceivedRequests(User user) {
         return requestRepository.getRequestsByReceiverAndStatusOrderBySentAtDesc(user, Status.PENDING);
+    }
+
+    @Override
+    public Request getRequestById(Long id) {
+        return requestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Request with id %s does not exist", id)));
     }
 
 }

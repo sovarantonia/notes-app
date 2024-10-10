@@ -18,7 +18,7 @@ import javax.persistence.EntityNotFoundException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +42,7 @@ public class RequestServiceTest {
         sender = new User(1L, "Sender", "Sender", "sender@example.com", "test123");
         receiver = new User(2L, "Receiver", "Receiver", "receiver@example.com", "test123");
 
-        request = new Request(1L, sender, receiver, Status.PENDING, LocalDate.now());
+        request = new Request(1L, sender, receiver, Status.PENDING, LocalDateTime.now());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class RequestServiceTest {
 
     @Test
     public void testSendRequest_PendingRequestAlreadyExists() {
-        Request anotherRequest = new Request(1L, sender, receiver, Status.PENDING, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(1L, sender, receiver, Status.PENDING, LocalDateTime.parse("2024-09-09T00:00:00"));
         when(userRepository.findById(1L)).thenReturn(Optional.of(sender));
         when(userRepository.findUserByEmail("receiver@example.com")).thenReturn(Optional.of(receiver));
         when(requestRepository.getRequestsBySenderAndReceiver(sender, receiver)).thenReturn(List.of(anotherRequest));
@@ -122,7 +122,7 @@ public class RequestServiceTest {
 
     @Test
     public void testSendRequest_PendingRequestAlreadyExistsFromReceiver() {
-        Request anotherRequest = new Request(1L, receiver, sender, Status.PENDING, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(1L, receiver, sender, Status.PENDING, LocalDateTime.parse("2024-09-09T00:00:00"));
         when(userRepository.findById(1L)).thenReturn(Optional.of(sender));
         when(userRepository.findUserByEmail("receiver@example.com")).thenReturn(Optional.of(receiver));
         when(requestRepository.getRequestsBySenderAndReceiver(receiver, sender)).thenReturn(List.of(anotherRequest));
@@ -138,7 +138,7 @@ public class RequestServiceTest {
 
     @Test
     public void testSendRequest_AcceptedRequestAlreadyExists() {
-        Request anotherRequest = new Request(1L, sender, receiver, Status.ACCEPTED, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(1L, sender, receiver, Status.ACCEPTED, LocalDateTime.parse("2024-09-09T00:00:00"));
         when(userRepository.findById(1L)).thenReturn(Optional.of(sender));
         when(userRepository.findUserByEmail("receiver@example.com")).thenReturn(Optional.of(receiver));
         when(requestRepository.getRequestsBySenderAndReceiver(sender, receiver)).thenReturn(List.of(anotherRequest));
@@ -154,7 +154,7 @@ public class RequestServiceTest {
 
     @Test
     public void testSendRequest_AcceptedRequestAlreadyExistsFromReceiver() {
-        Request anotherRequest = new Request(1L, receiver, sender, Status.ACCEPTED, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(1L, receiver, sender, Status.ACCEPTED, LocalDateTime.parse("2024-09-09T00:00:00"));
         when(userRepository.findById(1L)).thenReturn(Optional.of(sender));
         when(userRepository.findUserByEmail("receiver@example.com")).thenReturn(Optional.of(receiver));
         when(requestRepository.getRequestsBySenderAndReceiver(receiver, sender)).thenReturn(List.of(anotherRequest));
@@ -190,7 +190,7 @@ public class RequestServiceTest {
     @Test
     public void testDeleteRequest_NonPendingRequest() {
         Long id = 2L;
-        Request anotherRequest = new Request(2L, receiver, sender, Status.ACCEPTED, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(2L, receiver, sender, Status.ACCEPTED, LocalDateTime.parse("2024-09-09T00:00:00"));
         when(requestRepository.findById(id)).thenReturn(Optional.of(anotherRequest));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> requestService.deleteRequest(id));
@@ -220,7 +220,7 @@ public class RequestServiceTest {
     @Test
     public void testAcceptRequest_NonPendingRequest(){
         Long id = 2L;
-        Request anotherRequest = new Request(2L, receiver, sender, Status.ACCEPTED, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(2L, receiver, sender, Status.ACCEPTED, LocalDateTime.parse("2024-09-09T00:00:00"));
         when(requestRepository.findById(id)).thenReturn(Optional.of(anotherRequest));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> requestService.acceptRequest(id));
@@ -250,7 +250,7 @@ public class RequestServiceTest {
     @Test
     public void testDeclineRequest_NonPendingRequest(){
         Long id = 2L;
-        Request anotherRequest = new Request(2L, receiver, sender, Status.ACCEPTED, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(2L, receiver, sender, Status.ACCEPTED, LocalDateTime.parse("2024-09-09T00:00:00"));
         when(requestRepository.findById(id)).thenReturn(Optional.of(anotherRequest));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> requestService.declineRequest(id));
@@ -261,7 +261,7 @@ public class RequestServiceTest {
     @Test
     public void testGetSentRequests(){
         User anotherUser = new User(3L, "User", "user", "user@example.com", "test123");
-        Request anotherRequest = new Request(2L, sender, anotherUser, Status.PENDING, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(2L, sender, anotherUser, Status.PENDING, LocalDateTime.parse("2024-09-09T00:00:00"));
 
         when(requestRepository.getRequestsBySenderAndStatusOrderBySentAtDesc(sender, Status.PENDING))
                 .thenReturn(List.of(request, anotherRequest));
@@ -274,7 +274,7 @@ public class RequestServiceTest {
     @Test
     public void testGetReceivedRequests(){
         User anotherUser = new User(3L, "User", "user", "user@example.com", "test123");
-        Request anotherRequest = new Request(2L, anotherUser, receiver, Status.PENDING, LocalDate.parse("2024-09-09"));
+        Request anotherRequest = new Request(2L, anotherUser, receiver, Status.PENDING, LocalDateTime.parse("2024-09-09T00:00:00"));
 
         when(requestRepository.getRequestsByReceiverAndStatusOrderBySentAtDesc(receiver, Status.PENDING))
                 .thenReturn(List.of(request, anotherRequest));

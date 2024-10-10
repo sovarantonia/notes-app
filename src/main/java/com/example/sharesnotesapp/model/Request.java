@@ -1,15 +1,13 @@
 package com.example.sharesnotesapp.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "requests")
@@ -41,10 +39,15 @@ public class Request {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User receiver;
 
-    @Value("PENDING")
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     @Column(nullable = false)
-    private LocalDate sentAt;
+    private LocalDateTime sentAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.status = Status.PENDING;
+    }
 }
