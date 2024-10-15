@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.is;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -199,27 +200,97 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    public void testGetUserFriends() throws Exception{
-//        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
-//        UserResponseDto responseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
-//        UserInfoDto infoDto
-//                = new UserInfoDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail());
-//        UserResponseDto userResponseDto
-//                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail(), List.of(infoDto));
-//
-//
-//        when(userService.getUserFriends(any(User.class))).thenReturn(List.of(anotherUser));
-//        when(mapper.toDto(any(User.class))).thenReturn(userResponseDto);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//
-//        mockMvc.perform(get("/user/friends"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$[0].firstName", is("User2")))
-//                .andExpect(jsonPath("$[0].lastName", is("User2")))
-//                .andExpect(jsonPath("$[0].email", is("user2@example.com")));
-//                //.andExpect(jsonPath());
-//    }
+    @Test
+    public void testGetUserFriends() throws Exception{
+        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
 
+        UserInfoDto infoDto
+                = new UserInfoDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+        UserResponseDto userResponseDto
+                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail(), List.of(infoDto));
+
+        when(userService.getUserFriends(any(User.class))).thenReturn(List.of(anotherUser));
+        when(mapper.toDto(any(User.class))).thenReturn(userResponseDto);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        mockMvc.perform(get("/user/friends"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("User2")))
+                .andExpect(jsonPath("$[0].lastName", is("User2")))
+                .andExpect(jsonPath("$[0].email", is("user2@example.com")))
+                .andExpect(jsonPath("$[0].friends[0].id", is(1)))
+                .andExpect(jsonPath("$[0].friends[0].firstName", is(user.getFirstName())))
+                .andExpect(jsonPath("$[0].friends[0].lastName", is(user.getLastName())))
+                .andExpect(jsonPath("$[0].friends[0].email", is(user.getEmail())));
+    }
+
+    @Test
+    public void testGetUserFriends_UserNotLoggedIn() throws Exception{
+        mockMvc.perform(get("/user/friends"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testRemoveFromFriendList() throws Exception{
+        Long friendId = 2L;
+        user = mock(User.class);
+        User anotherUser = mock(User.class);
+        List<User> userFriend = new ArrayList<>();
+        userFriend.add(anotherUser);
+        List<User> anotherUserFriend = new ArrayList<>();
+        anotherUserFriend.add(user);
+
+        when(user.getFriendList()).thenReturn(userFriend);
+        when(anotherUser.getFriendList()).thenReturn(anotherUserFriend);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/user/remove-friend/{friendId}", friendId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testRemoveFromFriendList_UserNotLoggedIn() throws Exception{
+        Long friendId = 2L;
+        mockMvc.perform(delete("/user/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testRemoveFromFriendList_NotFriends() throws Exception{
+        Long friendId = 2L;
+
+        doThrow(new EntityNotFoundException("Users must be friends to remove from friend list"))
+                .when(userService).removeFromFriendList(any(User.class), any(Long.class));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/user/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Users must be friends to remove from friend list"));
+    }
+
+    @Test
+    public void testRemoveFromFriendList_SameUser() throws Exception{
+        Long friendId = 2L;
+
+        doThrow(new IllegalArgumentException("Must provide different users"))
+                .when(userService).removeFromFriendList(any(User.class), any(Long.class));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/user/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Must provide different users"));
+    }
+
+    @Test
+    public void testRemoveFromFriendList_InvalidId() throws Exception{
+        Long friendId = 2L;
+
+        doThrow(new EntityNotFoundException(String.format("User with id %s does not exist", friendId)))
+                .when(userService).removeFromFriendList(any(User.class), any(Long.class));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/user/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(String.format("User with id %s does not exist", friendId)));
+    }
 }
