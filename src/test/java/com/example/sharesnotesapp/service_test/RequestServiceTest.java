@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,9 @@ public class RequestServiceTest {
         receiver = new User(2L, "Receiver", "Receiver", "receiver@example.com", "test123");
 
         request = new Request(1L, sender, receiver, Status.PENDING, LocalDateTime.now());
+
+        sender.setFriendList(new ArrayList<>());
+        receiver.setFriendList(new ArrayList<>());
     }
 
     @Test
@@ -283,4 +287,37 @@ public class RequestServiceTest {
         assertEquals(request, sentRequests.get(0));
         assertEquals(anotherRequest, sentRequests.get(1));
     }
+
+    @Test
+    public void testAddToFriendList(){
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(sender));
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(receiver));
+        when(requestRepository.getRequestsBySenderAndReceiver(any(User.class), any(User.class))).thenReturn(List.of(request));
+        requestService.addToFriendList(sender, receiver);
+        assertEquals(sender, receiver.getFriendList().get(0));
+        assertEquals(receiver, sender.getFriendList().get(0));
+    }
+
+    @Test
+    public void testAddToFriendList_UsersAlreadyFriend(){
+        sender = mock(User.class);
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(receiver));
+        when(sender.getFriendList()).thenReturn(List.of(receiver));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> requestService.addToFriendList(sender, receiver));
+        String message = "Users are already friends";
+        assertEquals(message, exception.getMessage());
+    }
+    @Test
+    public void testAddToFriendList_SameUser(){
+        sender = mock(User.class);
+        receiver = mock(User.class);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(receiver));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(sender));
+        when(sender.getId()).thenReturn(1L);
+        when(receiver.getId()).thenReturn(1L);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> requestService.addToFriendList(sender, receiver));
+        String message = "Cannot add yourself to friend list";
+        assertEquals(message, exception.getMessage());
+    }
+
 }

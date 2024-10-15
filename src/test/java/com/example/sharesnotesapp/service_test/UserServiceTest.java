@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -239,5 +241,48 @@ class UserServiceTest {
         assertEquals(passwordEncoder.encode("test123"), user.getPassword());
     }
 
+    @Test
+    public void testGetUserFriends(){
+        User anotherUser = mock(User.class);
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(anotherUser));
+        when(anotherUser.getFriendList()).thenReturn(List.of(user));
+        List<User> friends = userService.getUserFriends(anotherUser);
+        assertEquals(user, friends.get(0));
+    }
 
+    @Test
+    public void testRemoveFromFriendList(){
+        User sender = mock(User.class);
+        List<User> friends = new ArrayList<>();
+        friends.add(user);
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(sender.getFriendList()).thenReturn(friends);
+        userService.removeFromFriendList(sender, 1L);
+        assertEquals(0, sender.getFriendList().size());
+        assertEquals(0, user.getFriendList().size());
+        verify(userRepository, times(2)).save(any(User.class));
+    }
+
+    @Test
+    public void testRemoveFromFriendList_NotFriends(){
+        User sender = mock(User.class);
+        List<User> friends = new ArrayList<>();
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(sender.getFriendList()).thenReturn(friends);
+        EntityNotFoundException exception
+                = assertThrows(EntityNotFoundException.class, () -> userService.removeFromFriendList(sender, 1L));
+        String message = "Users must be friends to remove from friend list";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void testRemoveFromFriendList_SameUser(){
+        user.setId(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        IllegalArgumentException exception
+                = assertThrows(IllegalArgumentException.class, () -> userService.removeFromFriendList(user, 1L));
+        String message = "Must provide different users";
+        assertEquals(message, exception.getMessage());
+    }
 }

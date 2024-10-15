@@ -4,15 +4,17 @@ import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.request.UserNameDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
 import com.example.sharesnotesapp.repository.UserRepository;
-import com.example.sharesnotesapp.service.user.UserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -98,10 +100,42 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(userToUpdate);
     }
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
+    }
+
+    @Transactional
+    @Override
+    public List<User> getUserFriends(User user) {
+        User managedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Hibernate.initialize(managedUser.getFriendList());
+        return managedUser.getFriendList();
+    }
+
+    @Transactional
+    @Override
+    public void removeFromFriendList(User user, Long friendId) {
+        User friend = userRepository.findById(friendId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s does not exist", friendId)));
+        if (user.getId().equals(friendId)){
+            throw new IllegalArgumentException("Must provide different users");
+        }
+
+        if (!user.getFriendList().contains(friend) && !friend.getFriendList().contains(user)){
+            throw new EntityNotFoundException("Users must be friends to remove from friend list");
+        }
+
+        User managedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Hibernate.initialize(managedUser.getFriendList());
+        Hibernate.initialize(friend.getFriendList());
+
+        user.getFriendList().remove(friend);
+        friend.getFriendList().remove(managedUser);
+        userRepository.save(managedUser);
+        userRepository.save(friend);
     }
 }

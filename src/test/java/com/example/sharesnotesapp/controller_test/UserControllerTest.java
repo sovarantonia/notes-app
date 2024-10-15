@@ -5,6 +5,7 @@ import com.example.sharesnotesapp.model.User;
 import com.example.sharesnotesapp.model.dto.mapper.UserMapper;
 import com.example.sharesnotesapp.model.dto.request.UserNameDto;
 import com.example.sharesnotesapp.model.dto.request.UserRequestDto;
+import com.example.sharesnotesapp.model.dto.response.UserInfoDto;
 import com.example.sharesnotesapp.model.dto.response.UserResponseDto;
 import com.example.sharesnotesapp.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.Matchers.is;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @WebMvcTest(UserController.class)
@@ -167,7 +169,7 @@ class UserControllerTest {
     }
 
     @Test
-    void testUpdateCredentials_InvalidCredentials() throws Exception{
+    void testUpdateCredentials_InvalidCredentials() throws Exception {
         Long id = 1L;
         String requestBody
                 = "{ \"firstName\": \"\", \"lastName\": \"Last-name\", \"email\": \"email@test.com\", \"password\": \"test123\" }";
@@ -195,6 +197,29 @@ class UserControllerTest {
                         .content(requestBody)
                 )
                 .andExpect(status().isBadRequest());
-
     }
+
+//    @Test
+//    public void testGetUserFriends() throws Exception{
+//        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
+//        UserResponseDto responseDto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+//        UserInfoDto infoDto
+//                = new UserInfoDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail());
+//        UserResponseDto userResponseDto
+//                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail(), List.of(infoDto));
+//
+//
+//        when(userService.getUserFriends(any(User.class))).thenReturn(List.of(anotherUser));
+//        when(mapper.toDto(any(User.class))).thenReturn(userResponseDto);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//
+//        mockMvc.perform(get("/user/friends"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$[0].firstName", is("User2")))
+//                .andExpect(jsonPath("$[0].lastName", is("User2")))
+//                .andExpect(jsonPath("$[0].email", is("user2@example.com")));
+//                //.andExpect(jsonPath());
+//    }
+
 }

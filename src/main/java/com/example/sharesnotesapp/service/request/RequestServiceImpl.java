@@ -7,10 +7,11 @@ import com.example.sharesnotesapp.model.dto.request.RequestRequestDto;
 import com.example.sharesnotesapp.repository.RequestRepository;
 import com.example.sharesnotesapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -69,7 +70,6 @@ public class RequestServiceImpl implements RequestService {
 
         requestRepository.deleteById(id);
     }
-
     @Override
     public void acceptRequest(Long id) {
         Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request does not exist"));
@@ -79,6 +79,7 @@ public class RequestServiceImpl implements RequestService {
 
         request.setStatus(Status.ACCEPTED);
         requestRepository.save(request);
+        addToFriendList(request.getSender(), request.getReceiver());
     }
 
     @Override
@@ -108,4 +109,19 @@ public class RequestServiceImpl implements RequestService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Request with id %s does not exist", id)));
     }
 
+    @Override
+    public void addToFriendList(User user, User friend) {
+        if (user.getFriendList().contains(friend) || friend.getFriendList().contains(user)){
+            throw new IllegalArgumentException("Users are already friends");
+        }
+
+        if (user.getId().equals(friend.getId())){
+            throw new IllegalArgumentException("Cannot add yourself to friend list");
+        }
+
+        user.getFriendList().add(friend);
+        friend.getFriendList().add(user);
+        userRepository.save(user);
+        userRepository.save(friend);
+    }
 }

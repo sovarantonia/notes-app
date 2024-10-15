@@ -15,4 +15,5 @@ public interface RequestService {
     List<Request> getSentRequests(User user);
     List<Request> getReceivedRequests(User user);
     Request getRequestById(Long id);
+    void addToFriendList(User user, User friend);
 }

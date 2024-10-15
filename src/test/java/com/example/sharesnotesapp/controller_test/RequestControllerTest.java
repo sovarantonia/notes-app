@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -222,6 +223,7 @@ public class RequestControllerTest {
                 = new UserResponseDto(sender.getId(), sender.getFirstName(), sender.getLastName(), sender.getEmail());
         UserResponseDto receiverResponse
                 = new UserResponseDto(receiver.getId(), receiver.getFirstName(), receiver.getLastName(), receiver.getEmail());
+
         RequestResponseDto responseDto
                 = new RequestResponseDto(senderResponse, receiverResponse, Status.ACCEPTED, request.getSentAt());
 
@@ -414,5 +416,17 @@ public class RequestControllerTest {
         mockMvc.perform(get("/requests/received"))
                 .andExpect(status().isBadRequest());
     }
+
+//    @Test
+//    public void testRemoveFromFriendList() throws Exception{
+//        sender = mock(User.class);
+//        List<User> friends = new ArrayList<>();
+//        friends.add(receiver);
+//
+//        when(sender.getFriendList()).thenReturn(friends);
+//
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        mockMvc.perform(delete("/requests/remove-friend/{friendId}", ))
+//    }
 
 }

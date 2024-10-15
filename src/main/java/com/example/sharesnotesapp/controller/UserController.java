@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -51,6 +52,33 @@ public class UserController {
 
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
             userService.deleteUser(id);
+
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/friends")
+    public ResponseEntity<List<UserResponseDto>> getUserFriends(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user){
+            List<User> userFriends = userService.getUserFriends(user);
+
+
+            return ResponseEntity.ok(userFriends.stream().map(mapper::toDto).toList());
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping("/remove-friend/{friendId}")
+    public ResponseEntity<String> removeFriendFromList(@PathVariable Long friendId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user){
+            userService.removeFromFriendList(user, friendId);
+
             return ResponseEntity.ok().build();
         }
 
