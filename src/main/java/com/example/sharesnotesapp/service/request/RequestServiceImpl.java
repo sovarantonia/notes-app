@@ -7,9 +7,7 @@ import com.example.sharesnotesapp.model.dto.request.RequestRequestDto;
 import com.example.sharesnotesapp.repository.RequestRepository;
 import com.example.sharesnotesapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
