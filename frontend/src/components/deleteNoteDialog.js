@@ -15,7 +15,7 @@ const DeleteNoteDialog = ({open, onClose, noteId, onUpdate}) => {
             setError('')
             onUpdate();
 
-        }catch (error) {
+        } catch (error) {
             setError('Error deleting the note');
         }
     }
@@ -25,15 +25,15 @@ const DeleteNoteDialog = ({open, onClose, noteId, onUpdate}) => {
             <div className="dialog-content">
 
                 <h2>Delete Note</h2>
-                {error && <div className="error">{error}</div>}
+                {error && <div className="error" id="errorMessage">{error}</div>}
                 <p>This action cannot be undone.</p>
                 <div className="dialog-buttons">
 
-                    <Button onClick={handleDeleteNote} variant="contained" color="primary">
-                        <FontAwesomeIcon icon={faEraser} /> Delete
+                    <Button id="deleteNoteButton" onClick={handleDeleteNote} variant="contained" color="primary">
+                        <FontAwesomeIcon icon={faEraser}/> Delete
                     </Button>
 
-                    <Button onClick={onClose} variant="outlined" color="secondary">
+                    <Button id="cancelButton" onClick={onClose} variant="outlined" color="secondary">
                         <FontAwesomeIcon icon={faTimes}/> Cancel
                     </Button>
                 </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import Header from "./header";
 import '../resources/landing-page.css';
+
 const LandingPage = () => {
     return (
         <div className="landingPageContainer">
@@ -11,7 +12,8 @@ const LandingPage = () => {
                     The perfect place to keep track of your thoughts, ideas, and progress.
                 </p>
                 <p>
-                    Whether you're working on self-development or motivation, we make it easier to create, organize, and share your notes.
+                    Whether you're working on self-development or motivation, we make it easier to create, organize, and
+                    share your notes.
                 </p>
                 <p>
                     Track your progress over time and access your notes anytime, anywhere.
@@ -19,7 +21,8 @@ const LandingPage = () => {
                 </p>
 
                 <h1>Empower Your Personal Growth</h1>
-                <p>Create notes that inspire your growth. Document your journey, track milestones, and stay motivated to improve every day.</p>
+                <p>Create notes that inspire your growth. Document your journey, track milestones, and stay motivated to
+                    improve every day.</p>
 
                 <h1>Keep Your Motivation on Track</h1>
                 <p>Visualize your progress and stay focused on your goals with our progress tracking features.</p>
@@ -31,8 +34,8 @@ const LandingPage = () => {
                 <p>Connect with others who are on a journey to improve themselves, just like you.</p>
 
                 <div className="authLinks">
-                    <Link to="/about">Learn more about us</Link>
-                    <Link to="/login">Start your journey now</Link>
+                    <Link to="/about" id="aboutButton">Learn more about us</Link>
+                    <Link to="/login" id="loginButton">Start your journey now</Link>
                 </div>
             </div>
 

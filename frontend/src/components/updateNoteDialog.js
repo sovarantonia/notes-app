@@ -80,12 +80,14 @@ const UpdateNoteDialog = ({open, onClose, noteId, onUpdate}) => {
                     value={note.title}
                     onChange={(e) => setNote({...note, title: e.target.value})}
                     fullWidth
+                    id="title"
                 />
                 <TextField
                     label="Content"
                     value={note.text}
                     onChange={(e) => setNote({...note, text: e.target.value})}
                     fullWidth
+                    id="content"
                 />
                 <TextField
                     label="Date"
@@ -94,12 +96,14 @@ const UpdateNoteDialog = ({open, onClose, noteId, onUpdate}) => {
                         readOnly: true
                     }}
                     fullWidth
+                    id="date"
                 />
                 <FormControl fullWidth>
                     <InputLabel>Grade</InputLabel>
                     <Select
                         value={grade}
                         onChange={handleGradeChange}
+                        id="grade"
                     >
                         {options.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
@@ -110,13 +114,13 @@ const UpdateNoteDialog = ({open, onClose, noteId, onUpdate}) => {
                 </FormControl>
                 <div className="dialog-buttons">
 
-                        <Button onClick={handleUpdate} variant="contained" color="primary">
-                            <FontAwesomeIcon icon={faSave}/> Update
-                        </Button>
+                    <Button onClick={handleUpdate} variant="contained" color="primary" id="updateButton">
+                        <FontAwesomeIcon icon={faSave}/> Update
+                    </Button>
 
-                        <Button onClick={onClose} variant="outlined" color="secondary">
-                            <FontAwesomeIcon icon={faTimes}/> Cancel
-                        </Button>
+                    <Button onClick={onClose} variant="outlined" color="secondary" id="cancelButton">
+                        <FontAwesomeIcon icon={faTimes}/> Cancel
+                    </Button>
 
 
                 </div>

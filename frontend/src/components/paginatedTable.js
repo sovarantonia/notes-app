@@ -63,17 +63,17 @@ const PaginatedTable = ({data, fetchNotes}) => {
                         <td>{item.grade}</td>
                         <td>{item.date}</td>
                         <td>
-                            <button type="table-button" title="Edit"
+                            <button type="table-button" title="Edit" id="updateButton"
                                     onClick={() => handleOpenDialog(item.id, "update-dialog")}>
                                 <FontAwesomeIcon icon={faPenToSquare} size="xl"/>
                             </button>
 
-                            <button type="table-button" title="Download"
+                            <button type="table-button" title="Download" id="downloadButton"
                                     onClick={() => handleOpenDialog(item.id, "download-dialog")}>
                                 <FontAwesomeIcon icon={faDownload} size="xl"/>
                             </button>
 
-                            <button type="table-button" title="Delete"
+                            <button type="table-button" title="Delete" id="deleteButton"
                                     onClick={() => handleOpenDialog(item.id, "delete-dialog")}>
                                 <FontAwesomeIcon icon={faTrashCan} size="xl"/>
                             </button>
@@ -111,16 +111,16 @@ const PaginatedTable = ({data, fetchNotes}) => {
             )}
 
             <div className="pagination">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
+                <button id="previousPageButton"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
                 >
                     Previous
                 </button>
                 <span>Page {currentPage} of {totalPages}</span>
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
+                <button id="nextPageButton"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
                 >
                     Next
                 </button>

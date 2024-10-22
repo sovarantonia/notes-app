@@ -69,7 +69,7 @@ const UserProfile = () => {
             <Sidebar onLogout={handleLogout}/>
             <div className="main-content">
                 <form onSubmit={handleSubmit} className="form">
-                    {error && <div className="error" aria-live="assertive">{error}</div>}
+                    {error && <div className="error" aria-live="assertive" id="errorMessage">{error}</div>}
                     <h2>User profile</h2>
                     <div className="form-group">
                         <label htmlFor="firstName">First Name:</label>
@@ -104,11 +104,11 @@ const UserProfile = () => {
                             required
                         />
                     </div>
-                    <button type="submit" onClick={handleSubmit}>
+                    <button type="submit" id="updateButton" onClick={handleSubmit}>
                         <FontAwesomeIcon icon={faSave}/>Update
                     </button>
 
-                    <button type="button" onClick={openPopup} className="delete-acc-btn">
+                    <button type="button" id="deletePopupButton" onClick={openPopup} className="delete-acc-btn">
                         <FontAwesomeIcon icon={faUserSlash} />Delete account
                     </button>
 

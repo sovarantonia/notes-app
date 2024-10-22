@@ -43,10 +43,10 @@ const DownloadDialog = ({open, onClose, noteId}) => {
                     </RadioGroup>
                 </FormControl>
                 <div className="dialog-buttons">
-                    <Button onClick={handleDownloadNote} variant="contained">
-                        <FontAwesomeIcon icon={faCircleDown} />Download
+                    <Button id="downloadButton" onClick={handleDownloadNote} variant="contained">
+                        <FontAwesomeIcon icon={faCircleDown}/>Download
                     </Button>
-                    <Button onClick={onClose} variant="outlined" color="secondary">
+                    <Button id="cancelButton" onClick={onClose} variant="outlined" color="secondary">
                         <FontAwesomeIcon icon={faTimes}/> Cancel
                     </Button>
                 </div>

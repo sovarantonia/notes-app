@@ -65,12 +65,13 @@ const CreateNotePage = ({onLogout}) => {
             <div className="main-content">
                 <h2>Create note</h2>
                 <div className="create-form">
-                    <form onSubmit={handleSubmit}>
-                        {error && <div className="error" aria-live="assertive">{error}</div>}
+                    <form onSubmit={handleSubmit} id="noteForm">
+                        {error && <div className="error" aria-live="assertive" id="errorMessage">{error}</div>}
                         <div className="form-group">
                             <label htmlFor="title">Title: </label>
                             <input
                                 type="text"
+                                id="titleInput"
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
                                 placeholder="Title"
@@ -82,6 +83,7 @@ const CreateNotePage = ({onLogout}) => {
                             <label htmlFor="text">Content: </label>
                             <input
                                 type="text"
+                                id="contentInput"
                                 value={text}
                                 onChange={e => setText(e.target.value)}
                                 placeholder="Text"
@@ -92,6 +94,7 @@ const CreateNotePage = ({onLogout}) => {
                         <div className="form-group">
                             <label htmlFor="date">Date: </label>
                             <DatePicker
+                                id="datePicker"
                                 dateFormat="dd-MM-yyyy"
                                 maxDate={new Date()}
                                 selected={date}
@@ -104,6 +107,8 @@ const CreateNotePage = ({onLogout}) => {
                         <div className="form-group">
                             <label htmlFor="grade">Grade: </label>
                             <Dropdown
+                                id="gradeDropdown"
+                                className="gradeDropdown"
                                 options={options}
                                 value={options.find(opt => opt.value === grade)} // Set selected option based on grade
                                 onChange={handleChange}

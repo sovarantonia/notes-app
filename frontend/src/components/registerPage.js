@@ -72,8 +72,8 @@ const RegisterPage = () => {
     return (
         <div className="container">
             <Header/>
-            <form onSubmit={handleSubmit} className="form">
-                {error && <div className="error" aria-live="assertive">{error}</div>}
+            <form onSubmit={handleSubmit} className="form" id="registerForm">
+                {error && <div className="error" aria-live="assertive" id="errorMessage">{error}</div>}
                 <h2>Register</h2>
                 <div className="form-group">
                     <label htmlFor="firstName">First Name:</label>
@@ -135,7 +135,7 @@ const RegisterPage = () => {
                         required
                     />
                 </div>
-                <button type="submit">Register</button>
+                <button type="submit" id="registerButton">Register</button>
                 <a onClick={() => history('/login')}>Already have an account? Login here</a>
             </form>
             <img src={sign_up} alt="Sign Up" className="signup-image"/>

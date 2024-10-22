@@ -38,17 +38,18 @@ const NotesBetweenWeek = () => {
 
     return (
         <div>
-            {error && <div className="error" aria-live="assertive">{error}</div>}
+            {error && <div className="error" aria-live="assertive" id="errorMessage">{error}</div>}
             <h2>Weekly chart</h2>
             <div className="datepicker-container">
 
                 <div className="rounded-datepicker">
-                    <DatePicker value={new Date(startDate).toDateString()} onChange={handleStartDateChange}
+                    <DatePicker id="startDate" value={new Date(startDate).toDateString()}
+                                onChange={handleStartDateChange}
                                 dateFormat="dd-MM-yyyy" calendarStartDay={1}/>
                 </div>
 
                 <div className="rounded-datepicker">
-                    <DatePicker value={new Date(endDate).toDateString()} onChange={handleStartDateChange}
+                    <DatePicker id="endDate" value={new Date(endDate).toDateString()} onChange={handleStartDateChange}
                                 dateFormat="dd-MM-yyyy" calendarStartDay={1} readOnly/>
                 </div>
 

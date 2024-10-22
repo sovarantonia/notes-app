@@ -3,11 +3,11 @@ import Sidebar from "./sidebar";
 import React, {useEffect, useState} from "react";
 import {filterNotesByTitle} from "./api";
 import PaginatedTable from "./paginatedTable";
-import { debounce } from 'lodash';
+import {debounce} from 'lodash';
 import "../resources/view-notes.css";
 
 const ViewNotes = () => {
-    const { logout } = useUser();
+    const {logout} = useUser();
     const [notes, setNotes] = useState([]);
     const [error, setError] = useState('');
     const [title, setTitle] = useState('');
@@ -41,17 +41,18 @@ const ViewNotes = () => {
 
     return (
         <div className="view-notes">
-            <Sidebar onLogout={handleLogout} />
+            <Sidebar onLogout={handleLogout}/>
             <div className="main-content">
                 <h2>View notes</h2>
                 <input
+                    id="searchBar"
                     type="search-text"
                     placeholder="Search..."
                     value={title}
                     onChange={handleTitleChange}
                 />
-                {error && <div className="error" aria-live="assertive">{error}</div>}
-                <PaginatedTable data={notes} fetchNotes={fetchNotes} />
+                {error && <div className="error" aria-live="assertive" id="errorMessage">{error}</div>}
+                <PaginatedTable data={notes} fetchNotes={fetchNotes}/>
             </div>
         </div>
     );
