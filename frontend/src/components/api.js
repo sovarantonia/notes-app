@@ -216,3 +216,74 @@ export const getNotesBetweenDates = async (startDate, endDate) => {
         }
     }
 }
+
+export const sendRequest = async (senderId, receiverEmail) => {
+    try {
+        const response = await api.post('/requests', {senderId, receiverEmail});
+        return response.data;
+    }catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed sending the request');
+        }
+    }
+}
+
+export const getReceivedRequests = async () => {
+    try {
+        const response = await api.get('/requests/received');
+        return response.data;
+    }catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the requests');
+        }
+    }
+}
+
+export const getSentRequests = async () => {
+    try {
+        const response = await api.get('/requests/sent');
+        return response.data;
+    }catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the requests');
+        }
+    }
+}
+
+export const acceptRequest = async (requestId) => {
+    try {
+        const response = await api.patch(`/requests/${requestId}/accept`);
+        return response.data;
+    }catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed accepting the request');
+        }
+    }
+}
+
+export const declineRequest = async (requestId) => {
+    try {
+        const response = await api.patch(`/requests/${requestId}/decline`);
+        return response.data;
+    }catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed declining the request');
+        }
+    }
+}
+

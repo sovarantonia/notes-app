@@ -1,0 +1,22 @@
+#acceptButton {
+    background-color: transparent;
+    color: #218838;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#acceptButton:hover {
+    color: #218838;
+}
+
+#declineButton {
+    background-color: transparent;
+    color: #f44336;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#declineButton:hover {
+    color: #f44336;
+}

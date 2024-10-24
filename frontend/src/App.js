@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/protectedRoute";
 import UserProfile from "./components/userProfile";
 import ViewNotes from "./components/viewNotes";
 import AboutPage from "./components/about";
+import RequestsPage from "./components/requestsPage";
 
 function App() {
     return (
@@ -35,6 +36,10 @@ function App() {
                     <Route
                         path="/view-notes"
                         element={<ProtectedRoute element={ViewNotes}/>}
+                    />
+                    <Route
+                        path="/user-requests"
+                        element={<ProtectedRoute element={RequestsPage}/>}
                     />
                 </Routes>
             </Router>

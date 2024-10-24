@@ -21,6 +21,8 @@ const Sidebar = ({onLogout}) => {
                     <li><Link to="/create-note" id="createNoteElement">Create new note</Link></li>
                     <li><Link to="/view-notes" id="viewNotesElement">View notes </Link></li>
                     <li><Link to="/profile" id="profileElement">Profile</Link></li>
+                    <li><Link to="/friends" id="friendList">Friends</Link></li>
+                    <li><Link to="/user-requests" id="userRequests">Manage requests</Link></li>
                 </div>
 
                 <li>
