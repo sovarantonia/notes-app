@@ -17,4 +17,6 @@ public interface UserService extends UserDetailsService {
     User updateUserCredentials(Long id, UserNameDto userRequestDto);
     List<User> getUserFriends(User user);
     void removeFromFriendList(User user, Long friendId);
+    List<User> searchUsers(String string, Long currentUserId);
+    List<User> searchUserFriends(String string, Long currentUserId);
 }

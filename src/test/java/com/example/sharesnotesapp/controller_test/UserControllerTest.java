@@ -201,7 +201,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testGetUserFriends() throws Exception{
+    public void testGetUserFriends() throws Exception {
         User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
 
         UserInfoDto infoDto
@@ -225,13 +225,13 @@ class UserControllerTest {
     }
 
     @Test
-    public void testGetUserFriends_UserNotLoggedIn() throws Exception{
+    public void testGetUserFriends_UserNotLoggedIn() throws Exception {
         mockMvc.perform(get("/user/friends"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testRemoveFromFriendList() throws Exception{
+    public void testRemoveFromFriendList() throws Exception {
         Long friendId = 2L;
         user = mock(User.class);
         User anotherUser = mock(User.class);
@@ -249,14 +249,14 @@ class UserControllerTest {
     }
 
     @Test
-    public void testRemoveFromFriendList_UserNotLoggedIn() throws Exception{
+    public void testRemoveFromFriendList_UserNotLoggedIn() throws Exception {
         Long friendId = 2L;
         mockMvc.perform(delete("/user/remove-friend/{friendId}", friendId))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testRemoveFromFriendList_NotFriends() throws Exception{
+    public void testRemoveFromFriendList_NotFriends() throws Exception {
         Long friendId = 2L;
 
         doThrow(new EntityNotFoundException("Users must be friends to remove from friend list"))
@@ -269,7 +269,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testRemoveFromFriendList_SameUser() throws Exception{
+    public void testRemoveFromFriendList_SameUser() throws Exception {
         Long friendId = 2L;
 
         doThrow(new IllegalArgumentException("Must provide different users"))
@@ -282,7 +282,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testRemoveFromFriendList_InvalidId() throws Exception{
+    public void testRemoveFromFriendList_InvalidId() throws Exception {
         Long friendId = 2L;
 
         doThrow(new EntityNotFoundException(String.format("User with id %s does not exist", friendId)))
@@ -293,4 +293,129 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(String.format("User with id %s does not exist", friendId)));
     }
+
+    @Test
+    public void testSearchUsers_EmptyString() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
+
+        UserResponseDto userResponseDto
+                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail());
+
+        when(userService.searchUsers(any(String.class), any(Long.class))).thenReturn(List.of(anotherUser));
+        when(mapper.toDto(any(User.class))).thenReturn(userResponseDto);
+
+        mockMvc.perform(get("/user/search")
+                        .param("searchString", ""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("User2")))
+                .andExpect(jsonPath("$[0].lastName", is("User2")))
+                .andExpect(jsonPath("$[0].email", is("user2@example.com")));
+    }
+
+    @Test
+    public void testSearchUsers_NonEmptyString() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
+
+        UserResponseDto userResponseDto
+                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail());
+
+        when(userService.searchUsers(any(String.class), any(Long.class))).thenReturn(List.of(anotherUser));
+        when(mapper.toDto(any(User.class))).thenReturn(userResponseDto);
+
+        mockMvc.perform(get("/user/search")
+                        .param("searchString", "use"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("User2")))
+                .andExpect(jsonPath("$[0].lastName", is("User2")))
+                .andExpect(jsonPath("$[0].email", is("user2@example.com")));
+    }
+
+    @Test
+    public void testSearchUsers_EmptyList() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
+
+        UserResponseDto userResponseDto
+                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail());
+
+        when(userService.searchUsers(any(String.class), any(Long.class))).thenReturn(List.of());
+        when(mapper.toDto(any(User.class))).thenReturn(userResponseDto);
+
+        mockMvc.perform(get("/user/search")
+                        .param("searchString", "abc"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testSearchUsers_NotLoggedIn() throws Exception {
+        mockMvc.perform(get("/user/search")
+                        .param("searchString", ""))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testSearchUserFriends_EmptyString() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
+        User anotherUser1 = new User(3L, "X", "Y", "user3@example.com", "test123");
+
+        UserResponseDto userResponseDto
+                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail());
+
+        UserResponseDto userResponseDto1
+                = new UserResponseDto(anotherUser1.getId(), anotherUser1.getFirstName(), anotherUser1.getLastName(), anotherUser1.getEmail());
+
+        user.getFriendList().add(anotherUser);
+        user.getFriendList().add(anotherUser1);
+
+        when(userService.searchUserFriends(any(String.class), any(Long.class))).thenReturn(List.of(anotherUser, anotherUser1));
+        when(mapper.toDto(anotherUser)).thenReturn(userResponseDto);
+        when(mapper.toDto(anotherUser1)).thenReturn(userResponseDto1);
+
+        mockMvc.perform(get("/user/friends/search")
+                        .param("searchString", ""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("User2")))
+                .andExpect(jsonPath("$[0].lastName", is("User2")))
+                .andExpect(jsonPath("$[0].email", is("user2@example.com")))
+                .andExpect(jsonPath("$[1].firstName", is("X")))
+                .andExpect(jsonPath("$[1].lastName", is("Y")))
+                .andExpect(jsonPath("$[1].email", is("user3@example.com")));
+    }
+
+    @Test
+    public void testSearchUserFriends_NonEmptyString() throws Exception {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User anotherUser = new User(2L, "User2", "User2", "user2@example.com", "test123");
+
+        UserResponseDto userResponseDto
+                = new UserResponseDto(anotherUser.getId(), anotherUser.getFirstName(), anotherUser.getLastName(), anotherUser.getEmail());
+
+        user.getFriendList().add(anotherUser);
+
+        when(userService.searchUserFriends(any(String.class), any(Long.class))).thenReturn(List.of(anotherUser));
+        when(mapper.toDto(anotherUser)).thenReturn(userResponseDto);
+
+        mockMvc.perform(get("/user/friends/search")
+                        .param("searchString", "use"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].firstName", is("User2")))
+                .andExpect(jsonPath("$[0].lastName", is("User2")))
+                .andExpect(jsonPath("$[0].email", is("user2@example.com")));
+    }
+
+    @Test
+    public void testSearchUserFriends_NotLoggedIn() throws Exception {
+        mockMvc.perform(get("/user/friends/search")
+                        .param("searchString", "use"))
+                .andExpect(status().isBadRequest());
+    }
+
 }

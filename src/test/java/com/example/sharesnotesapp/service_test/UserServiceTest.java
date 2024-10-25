@@ -68,7 +68,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testSaveUser_EmailAlreadyExists(){
+    void testSaveUser_EmailAlreadyExists() {
         User existingUser = new User();
         existingUser.setFirstName("Exist");
         existingUser.setLastName("Exist");
@@ -95,7 +95,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserById(){
+    void testGetUserById() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         User foundUser = userService.getUserById(1L).orElseThrow(null);
@@ -107,12 +107,14 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserById_NonExistent(){
+    void testGetUserById_NonExistent() {
         Long nonExistentId = 888L;
 
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
 
-        Throwable exception = assertThrows(EntityNotFoundException.class, () -> {userService.getUserById(nonExistentId);});
+        Throwable exception = assertThrows(EntityNotFoundException.class, () -> {
+            userService.getUserById(nonExistentId);
+        });
 
         String message = String.format("User with id %s does not exist", nonExistentId);
 
@@ -120,7 +122,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserByEmail(){
+    void testGetUserByEmail() {
         String email = "test_example@test.com";
 
         when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(user));
@@ -134,12 +136,14 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserByEmail_NonExistent(){
+    void testGetUserByEmail_NonExistent() {
         String nonExistentEmail = "no_email@test.com";
 
         when(userRepository.findUserByEmail(nonExistentEmail)).thenReturn(Optional.empty());
 
-        Throwable exception = assertThrows(UsernameNotFoundException.class, () -> {userService.getUserByEmail(nonExistentEmail);});
+        Throwable exception = assertThrows(UsernameNotFoundException.class, () -> {
+            userService.getUserByEmail(nonExistentEmail);
+        });
 
         String message = String.format("User with the address %s does not exist", nonExistentEmail);
 
@@ -147,7 +151,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidateEmail(){
+    void testValidateEmail() {
         String newValidEmail = "new_email@test.com";
 
         when(userRepository.findUserByEmail(newValidEmail)).thenReturn(Optional.empty());
@@ -156,7 +160,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testValidateEmail_NotValid(){
+    void testValidateEmail_NotValid() {
         User user = new User();
         String alreadyUsedEmail = "used_email@test.com";
         user.setFirstName("A");
@@ -172,7 +176,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testDeleteUser(){
+    void testDeleteUser() {
         Long id = 1L;
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
@@ -183,7 +187,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testDeleteUser_NonExistentId(){
+    void testDeleteUser_NonExistentId() {
         Long nonExistentId = 999L;
 
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
@@ -197,7 +201,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUserCredentials(){
+    void testUpdateUserCredentials() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         UserNameDto userNameDto = new UserNameDto();
@@ -211,7 +215,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUserCredential_InvalidId(){
+    void testUpdateUserCredential_InvalidId() {
         Long nonExistingId = 123L;
 
         when(userRepository.findById(nonExistingId)).thenReturn(Optional.empty());
@@ -228,7 +232,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUserCredential_AllEmptyFields(){
+    void testUpdateUserCredential_AllEmptyFields() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         UserNameDto userNameDto = new UserNameDto();
@@ -242,10 +246,10 @@ class UserServiceTest {
     }
 
     @Test
-    public void testGetUserFriends(){
+    public void testGetUserFriends() {
         User anotherUser = mock(User.class);
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(anotherUser));
-        List <User> friendList = new ArrayList<>();
+        List<User> friendList = new ArrayList<>();
         friendList.add(user);
         when(anotherUser.getFriendList()).thenReturn(friendList);
         List<User> friends = userService.getUserFriends(anotherUser);
@@ -253,7 +257,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testRemoveFromFriendList(){
+    public void testRemoveFromFriendList() {
         User sender = new User(3L, "Sender", "sender", "sender@example.com", "test123");
         sender.getFriendList().add(user);
         user.getFriendList().add(sender);
@@ -268,7 +272,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testRemoveFromFriendList_NotFriends(){
+    public void testRemoveFromFriendList_NotFriends() {
         User sender = mock(User.class);
         List<User> friends = new ArrayList<>();
 
@@ -281,12 +285,59 @@ class UserServiceTest {
     }
 
     @Test
-    public void testRemoveFromFriendList_SameUser(){
+    public void testRemoveFromFriendList_SameUser() {
         user.setId(1L);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         IllegalArgumentException exception
                 = assertThrows(IllegalArgumentException.class, () -> userService.removeFromFriendList(user, 1L));
         String message = "Must provide different users";
         assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void testSearchUsers_EmptyString() {
+        User anotherUser = new User(2L, "Ams", "Bs", "abc@example.com", "test123");
+        when(userRepository.findByIdNot(any(Long.class))).thenReturn(List.of(anotherUser, user));
+        List<User> users = userService.searchUsers("", 3L);
+        assertEquals(anotherUser, users.get(0));
+        assertEquals(user, users.get(1));
+        verify(userRepository, times(1)).findByIdNot(3L);
+    }
+
+    @Test
+    public void testSearchUsers_NonEmptyString() {
+        when(userRepository.getUsersByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndIdNotOrderByLastNameAsc(any(String.class), any(String.class), any(String.class), any(Long.class)))
+                .thenReturn(List.of(user));
+
+        List<User> users = userService.searchUsers("ex", 3L);
+        assertEquals(user, users.get(0));
+    }
+
+    @Test
+    public void testSearchUserFriends_EmptyString() {
+        User anotherUser = new User(2L, "Ams", "Bs", "abc@example.com", "test123");
+        User anotherUser1 = new User(3L, "B", "F", "abc4@example.com", "test123");
+        user.getFriendList().add(anotherUser);
+        user.getFriendList().add(anotherUser1);
+        anotherUser.getFriendList().add(user);
+        anotherUser1.getFriendList().add(user);
+
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+
+        List<User> friends = userService.searchUserFriends("", 1L);
+        assertEquals(anotherUser, friends.get(0));
+        assertEquals(anotherUser1, friends.get(1));
+    }
+
+    @Test
+    public void testSearchUserFriends_NonEmptyString() {
+        User anotherUser = new User(2L, "Ams", "Bs", "abc@example.com", "test123");
+        user.getFriendList().add(anotherUser);
+        anotherUser.getFriendList().add(user);
+
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+
+        List<User> friends = userService.searchUserFriends("am", 1L);
+        assertEquals(anotherUser, friends.get(0));
     }
 }

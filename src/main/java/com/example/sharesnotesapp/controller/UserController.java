@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -81,6 +82,30 @@ public class UserController {
             userService.removeFromFriendList(user, friendId);
 
             return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserResponseDto>> searchUsers(@RequestParam(defaultValue = "") String searchString){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user){
+            List<User> users = userService.searchUsers(searchString, user.getId());
+
+            return ResponseEntity.ok(users.stream().map(mapper::toDto).toList());
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/friends/search")
+    public ResponseEntity<List<UserResponseDto>> searchUserFriends(@RequestParam(defaultValue = "") String searchString){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user){
+            List<User> users = userService.searchUserFriends(searchString, user.getId());
+
+            return ResponseEntity.ok(users.stream().map(mapper::toDto).toList());
         }
 
         return ResponseEntity.badRequest().build();

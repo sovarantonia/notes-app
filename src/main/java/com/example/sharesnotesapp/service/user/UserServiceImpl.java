@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserById(Long id) {
-        if(userRepository.findById(id).isEmpty()){
+        if (userRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException(String.format("User with id %s does not exist", id));
         }
         return userRepository.findById(id);
@@ -101,6 +101,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(userToUpdate);
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
@@ -112,7 +113,7 @@ public class UserServiceImpl implements UserService {
         User managedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Hibernate.initialize(managedUser.getFriendList());
-        List <User> friends = managedUser.getFriendList();
+        List<User> friends = managedUser.getFriendList();
         friends.sort(Comparator.comparing(User::getLastName));
 
         return friends;
@@ -129,11 +130,11 @@ public class UserServiceImpl implements UserService {
 
         Hibernate.initialize(managedUser.getFriendList());
 
-        if (user.getId().equals(friendId)){
+        if (user.getId().equals(friendId)) {
             throw new IllegalArgumentException("Must provide different users");
         }
 
-        if (!managedUser.getFriendList().contains(friend) && !friend.getFriendList().contains(managedUser)){
+        if (!managedUser.getFriendList().contains(friend) && !friend.getFriendList().contains(managedUser)) {
             throw new EntityNotFoundException("Users must be friends to remove from friend list");
         }
 
@@ -144,5 +145,37 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(managedUser);
         userRepository.save(friend);
+    }
+
+    @Override
+    public List<User> searchUsers(String string, Long currentUserId) {
+        if (!string.isEmpty()) {
+            return userRepository
+                    .getUsersByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndIdNotOrderByLastNameAsc
+                            (string, string, string, currentUserId);
+        } else {
+            return userRepository.findByIdNot(currentUserId);
+        }
+    }
+
+    @Transactional
+    @Override
+    public List<User> searchUserFriends(String string, Long currentUserId) {
+        User managedUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Hibernate.initialize(managedUser.getFriendList());
+
+        List<User> friends = managedUser.getFriendList();
+        if (!string.isEmpty()) {
+
+            return friends.stream().filter(friend -> friend.getFirstName().toLowerCase().contains(string.toLowerCase()) ||
+                            friend.getLastName().toLowerCase().contains(string.toLowerCase()) ||
+                            friend.getEmail().toLowerCase().contains(string.toLowerCase()))
+                    .toList();
+        } else {
+
+            return friends;
+        }
     }
 }
