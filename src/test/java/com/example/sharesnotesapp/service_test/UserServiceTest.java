@@ -254,11 +254,13 @@ class UserServiceTest {
 
     @Test
     public void testRemoveFromFriendList(){
-        User sender = mock(User.class);
-        List<User> friends = new ArrayList<>();
-        friends.add(user);
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        when(sender.getFriendList()).thenReturn(friends);
+        User sender = new User(3L, "Sender", "sender", "sender@example.com", "test123");
+        sender.getFriendList().add(user);
+        user.getFriendList().add(sender);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findById(3L)).thenReturn(Optional.of(sender));
+
         userService.removeFromFriendList(sender, 1L);
         assertEquals(0, sender.getFriendList().size());
         assertEquals(0, user.getFriendList().size());
