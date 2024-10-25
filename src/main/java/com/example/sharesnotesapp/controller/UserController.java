@@ -31,6 +31,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id).orElseThrow(EntityNotFoundException::new);
+
         return ResponseEntity.ok(mapper.toDto(user));
     }
 
@@ -40,6 +41,7 @@ public class UserController {
 
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
             User updatedUser = userService.updateUserCredentials(id, userRequestDto);
+
             return ResponseEntity.ok(mapper.toDto(updatedUser));
         }
 
@@ -65,7 +67,6 @@ public class UserController {
 
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user){
             List<User> userFriends = userService.getUserFriends(user);
-
 
             return ResponseEntity.ok(userFriends.stream().map(mapper::toDto).toList());
         }

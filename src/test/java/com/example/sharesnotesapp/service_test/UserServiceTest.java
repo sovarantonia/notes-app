@@ -245,9 +245,11 @@ class UserServiceTest {
     public void testGetUserFriends(){
         User anotherUser = mock(User.class);
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(anotherUser));
-        when(anotherUser.getFriendList()).thenReturn(List.of(user));
+        List <User> friendList = new ArrayList<>();
+        friendList.add(user);
+        when(anotherUser.getFriendList()).thenReturn(friendList);
         List<User> friends = userService.getUserFriends(anotherUser);
-        assertEquals(user, friends.get(0));
+        assertEquals(friendList.get(0), friends.get(0));
     }
 
     @Test

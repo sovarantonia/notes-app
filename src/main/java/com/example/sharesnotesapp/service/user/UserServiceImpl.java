@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,7 +112,10 @@ public class UserServiceImpl implements UserService {
         User managedUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Hibernate.initialize(managedUser.getFriendList());
-        return managedUser.getFriendList();
+        List <User> friends = managedUser.getFriendList();
+        friends.sort(Comparator.comparing(User::getLastName));
+
+        return friends;
     }
 
     @Transactional
