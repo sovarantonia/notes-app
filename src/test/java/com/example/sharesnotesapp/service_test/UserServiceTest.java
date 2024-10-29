@@ -306,7 +306,7 @@ class UserServiceTest {
 
     @Test
     public void testSearchUsers_NonEmptyString() {
-        when(userRepository.getUsersByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndIdNotOrderByLastNameAsc(any(String.class), any(String.class), any(String.class), any(Long.class)))
+        when(userRepository.searchUsersExcludingCurrent(any(Long.class), any(String.class)))
                 .thenReturn(List.of(user));
 
         List<User> users = userService.searchUsers("ex", 3L);

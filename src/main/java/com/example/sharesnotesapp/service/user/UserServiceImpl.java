@@ -151,8 +151,8 @@ public class UserServiceImpl implements UserService {
     public List<User> searchUsers(String string, Long currentUserId) {
         if (!string.isEmpty()) {
             return userRepository
-                    .getUsersByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseAndIdNotOrderByLastNameAsc
-                            (string, string, string, currentUserId);
+                    .searchUsersExcludingCurrent
+                            (currentUserId, string);
         } else {
             return userRepository.findByIdNot(currentUserId);
         }
