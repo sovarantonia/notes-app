@@ -11,6 +11,7 @@ import UserProfile from "./components/userProfile";
 import ViewNotes from "./components/viewNotes";
 import AboutPage from "./components/about";
 import RequestsPage from "./components/requestsPage";
+import FriendsPage from "./components/friendsPage";
 
 function App() {
     return (
@@ -40,6 +41,10 @@ function App() {
                     <Route
                         path="/user-requests"
                         element={<ProtectedRoute element={RequestsPage}/>}
+                    />
+                    <Route
+                        path="/friends"
+                        element={<ProtectedRoute element={FriendsPage} />}
                     />
                 </Routes>
             </Router>

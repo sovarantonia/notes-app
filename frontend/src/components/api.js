@@ -124,7 +124,7 @@ export const getNoteById = async (noteId) => {
 
 export const filterNotesByTitle = async (title) => {
     try {
-        const response = await api.get('/notes/filter', {params: {string: title} });
+        const response = await api.get('/notes/filter', {params: {string: title}});
         return response.data;
     } catch (error) {
         console.error('Error response:', error);
@@ -167,7 +167,7 @@ export const updateNote = async (noteId, userId, title, text, date, grade) => {
 export const downloadNote = async (noteId, fileType) => {
     try {
         const response = await api.get(`/notes/${noteId}/download`, {
-            params: { type: fileType },
+            params: {type: fileType},
             responseType: 'blob', // Ensure binary data (file)
         });
 
@@ -193,7 +193,7 @@ export const latestNotes = async () => {
     try {
         const response = await api.get('/notes/latest');
         return response.data;
-    }catch (error) {
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -207,7 +207,7 @@ export const getNotesBetweenDates = async (startDate, endDate) => {
     try {
         const response = await api.get('/notes/dates', {params: {startDate: startDate, endDate: endDate}});
         return response.data;
-    }catch (error) {
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -221,7 +221,7 @@ export const sendRequest = async (senderId, receiverEmail) => {
     try {
         const response = await api.post('/requests', {senderId, receiverEmail});
         return response.data;
-    }catch (error) {
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -235,7 +235,7 @@ export const getReceivedRequests = async () => {
     try {
         const response = await api.get('/requests/received');
         return response.data;
-    }catch (error) {
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -249,7 +249,7 @@ export const getSentRequests = async () => {
     try {
         const response = await api.get('/requests/sent');
         return response.data;
-    }catch (error) {
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -263,7 +263,7 @@ export const acceptRequest = async (requestId) => {
     try {
         const response = await api.patch(`/requests/${requestId}/accept`);
         return response.data;
-    }catch (error) {
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -277,7 +277,7 @@ export const declineRequest = async (requestId) => {
     try {
         const response = await api.patch(`/requests/${requestId}/decline`);
         return response.data;
-    }catch (error) {
+    } catch (error) {
         console.error('Error response:', error);
         if (error.response && error.response.data) {
             throw new Error(JSON.stringify(error.response.data));
@@ -287,3 +287,58 @@ export const declineRequest = async (requestId) => {
     }
 }
 
+export const getUserFriends = async () => {
+    try {
+        const response = await api.get('/user/friends');
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed getting friend list');
+        }
+    }
+}
+
+export const removeFriend = async (friendId) => {
+    try {
+        const response = await api.delete(`/user/remove-friend/${friendId}`)
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed removing friend');
+        }
+    }
+}
+
+export const searchUsers = async (searchString) => {
+    try {
+        const response = await api.get('/user/search', {params: {searchString: searchString}});
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the users');
+        }
+    }
+}
+
+export const searchUserFriends = async (searchString) => {
+    try {
+        const response = await api.get('/user/friends/search', {params: {searchString: searchString}});
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving user friends');
+        }
+    }
+}

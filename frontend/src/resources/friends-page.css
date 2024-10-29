@@ -1,0 +1,47 @@
+#removeButton {
+    background-color: transparent;
+    color: #f44336;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#removeButton:hover {
+    color: #f44336;
+}
+
+.delete-friend-dialog .dialog-content-text {
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.delete-friend-dialog .dialog-buttons .MuiButton-containedPrimary {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-friend-dialog .dialog-buttons .MuiButton-containedPrimary:hover {
+    background-color: #bf342a;
+}
+
+.delete-friend-dialog .dialog-buttons .MuiButton-outlinedSecondary {
+    border-color: #2db34b;
+    color: #2db34b;
+}
+
+.delete-friend-dialog .dialog-buttons .MuiButton-outlinedSecondary:hover {
+    background-color: rgba(45, 179, 75, 0.1);
+    border-color: #2db34b;
+}
+
+.send-button {
+    background-color: #2db34b;
+    color: white;
+    border: 1px solid #2db34b;
+    transition: background-color 0.2s;
+    margin-top: 15px;
+    width: 7%;
+}
+
+.send-button:hover {
+    background-color: rgb(32, 128, 52);
+}
