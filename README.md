@@ -1,3 +1,8 @@
+
+# Share-notes-app
+
+This **note sharing application** is designed to facilitate the **creation, sharing, and management of notes** while promoting a collaborative environment among users. The application provides a clean and intuitive user interface, making it easy to access, manage, and share notes with friends.
+
 ## Features
 
 - **User Authentication**: 
@@ -23,5 +28,6 @@
 - **Backend**: Developed using **Java Spring Boot** for robust and scalable server-side functionality.
 - **Database**: Utilizes **MySQL**  for storing user data and notes.
   
+#
 
 The code is in backend and frontend branches. In orded to run the frontend and backend simultaneously, you should clone the project twice in different folders. More detailed steps on how to run each part are found in the readme files from the 2 branches.
