@@ -342,3 +342,73 @@ export const searchUserFriends = async (searchString) => {
         }
     }
 }
+
+export const shareNote = async (noteId, receiverEmail) => {
+    try {
+        const response = await api.post(`/share/${noteId}`, receiverEmail, {
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        })
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed sharing note');
+        }
+    }
+}
+
+export const getShareById = async (noteId) => {
+    try {
+        const response = await api.get(`/share/${noteId}`)
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the share');
+        }
+    }
+}
+
+export const getSentSharedNotes = async (receiverEmail) => {
+    try {
+        const response = await api.get('/share/sent', {
+            params: {receiverEmail: receiverEmail},
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        })
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the shares');
+        }
+    }
+}
+
+export const getReceivedSharedNotes = async (senderEmail) => {
+    try {
+        const response = await api.get('/share/sent', {
+            params: {senderEmail: senderEmail},
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        })
+        return response.data;
+    } catch (error) {
+        console.error('Error response:', error);
+        if (error.response && error.response.data) {
+            throw new Error(JSON.stringify(error.response.data));
+        } else {
+            throw new Error('Failed retrieving the shares');
+        }
+    }
+}

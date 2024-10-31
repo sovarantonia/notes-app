@@ -33,7 +33,7 @@
     border-color: #2db34b;
 }
 
-.send-button {
+#sendRequestButton {
     background-color: #2db34b;
     color: white;
     border: 1px solid #2db34b;
@@ -42,6 +42,6 @@
     width: 7%;
 }
 
-.send-button:hover {
+#sendRequestButton:hover {
     background-color: rgb(32, 128, 52);
 }

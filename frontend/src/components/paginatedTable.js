@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import "../resources/table.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDownload, faPenToSquare, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {faDownload, faPenToSquare, faShare, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import UpdateNoteDialog from "./updateNoteDialog";
 import DeleteNoteDialog from "./deleteNoteDialog";
 import DownloadDialog from "./downloadDialog";
+import ShareDialog from "./shareDialog";
 
 
 const PaginatedTable = ({data, fetchNotes}) => {
@@ -73,10 +74,16 @@ const PaginatedTable = ({data, fetchNotes}) => {
                                 <FontAwesomeIcon icon={faDownload} size="xl"/>
                             </button>
 
+                            <button type="table-button" title="Share note" id="shareButton"
+                            onClick={() => handleOpenDialog(item.id, "share-dialog")}>
+                                <FontAwesomeIcon icon={faShare} size="xl"/>
+                            </button>
+
                             <button type="table-button" title="Delete" id="deleteButton"
                                     onClick={() => handleOpenDialog(item.id, "delete-dialog")}>
                                 <FontAwesomeIcon icon={faTrashCan} size="xl"/>
                             </button>
+
 
                         </td>
                     </tr>
@@ -105,6 +112,14 @@ const PaginatedTable = ({data, fetchNotes}) => {
             {selectedNoteId !== null && (
                 <DownloadDialog
                     open={open && activeDialog === "download-dialog"}
+                    onClose={handleCloseDialog}
+                    noteId={selectedNoteId}
+                />
+            )}
+
+            {selectedNoteId !== null && (
+                <ShareDialog
+                    open={open && activeDialog === "share-dialog"}
                     onClose={handleCloseDialog}
                     noteId={selectedNoteId}
                 />

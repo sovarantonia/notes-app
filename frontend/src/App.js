@@ -12,6 +12,7 @@ import ViewNotes from "./components/viewNotes";
 import AboutPage from "./components/about";
 import RequestsPage from "./components/requestsPage";
 import FriendsPage from "./components/friendsPage";
+import SharesPage from "./components/sharesPage";
 
 function App() {
     return (
@@ -44,7 +45,11 @@ function App() {
                     />
                     <Route
                         path="/friends"
-                        element={<ProtectedRoute element={FriendsPage} />}
+                        element={<ProtectedRoute element={FriendsPage}/>}
+                    />
+                    <Route
+                        path="/shares"
+                        element={<ProtectedRoute element={SharesPage}/>}
                     />
                 </Routes>
             </Router>

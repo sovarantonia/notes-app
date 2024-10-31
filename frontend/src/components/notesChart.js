@@ -55,8 +55,10 @@ const NotesBetweenWeek = () => {
 
             </div>
 
-
             <div className="barchart-container">
+                {weeklyGrades.length === 0 ? (
+                    <div>No data to display</div>
+                ) : (
                 <BarChart
                     series={[
                         {
@@ -85,14 +87,10 @@ const NotesBetweenWeek = () => {
 
                     height={290}
                 />
+                )}
             </div>
-
-
         </div>
-
     );
-
-
 };
 
 export default NotesBetweenWeek;
