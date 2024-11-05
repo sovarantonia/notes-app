@@ -255,45 +255,6 @@ class UserServiceTest {
         List<User> friends = userService.getUserFriends(anotherUser);
         assertEquals(friendList.get(0), friends.get(0));
     }
-
-    @Test
-    public void testRemoveFromFriendList() {
-        User sender = new User(3L, "Sender", "sender", "sender@example.com", "test123");
-        sender.getFriendList().add(user);
-        user.getFriendList().add(sender);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(userRepository.findById(3L)).thenReturn(Optional.of(sender));
-
-        userService.removeFromFriendList(sender, 1L);
-        assertEquals(0, sender.getFriendList().size());
-        assertEquals(0, user.getFriendList().size());
-        verify(userRepository, times(2)).save(any(User.class));
-    }
-
-    @Test
-    public void testRemoveFromFriendList_NotFriends() {
-        User sender = mock(User.class);
-        List<User> friends = new ArrayList<>();
-
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        when(sender.getFriendList()).thenReturn(friends);
-        EntityNotFoundException exception
-                = assertThrows(EntityNotFoundException.class, () -> userService.removeFromFriendList(sender, 1L));
-        String message = "Users must be friends to remove from friend list";
-        assertEquals(message, exception.getMessage());
-    }
-
-    @Test
-    public void testRemoveFromFriendList_SameUser() {
-        user.setId(1L);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        IllegalArgumentException exception
-                = assertThrows(IllegalArgumentException.class, () -> userService.removeFromFriendList(user, 1L));
-        String message = "Must provide different users";
-        assertEquals(message, exception.getMessage());
-    }
-
     @Test
     public void testSearchUsers_EmptyString() {
         User anotherUser = new User(2L, "Ams", "Bs", "abc@example.com", "test123");

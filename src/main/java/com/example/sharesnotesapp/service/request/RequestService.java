@@ -16,4 +16,5 @@ public interface RequestService {
     List<Request> getReceivedRequests(User user);
     Request getRequestById(Long id);
     void addToFriendList(User user, User friend);
+    void removeFromFriendList(User user, Long friendId);
 }

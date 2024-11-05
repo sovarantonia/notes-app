@@ -113,4 +113,16 @@ public class RequestController {
 
         return ResponseEntity.badRequest().build();
     }
+
+    @DeleteMapping("/remove-friend/{friendId}")
+    public ResponseEntity<String> removeFriendFromList(@PathVariable Long friendId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.isAuthenticated() && authentication.getPrincipal() instanceof User user){
+            requestService.removeFromFriendList(user, friendId);
+
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
 }

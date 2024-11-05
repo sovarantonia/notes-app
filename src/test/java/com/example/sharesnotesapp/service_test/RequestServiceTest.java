@@ -320,4 +320,44 @@ public class RequestServiceTest {
         assertEquals(message, exception.getMessage());
     }
 
+    @Test
+    public void testRemoveFromFriendList() {
+        sender.getFriendList().add(receiver);
+        receiver.getFriendList().add(sender);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(sender));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(receiver));
+        when(requestRepository.getRequestsBySenderAndReceiver(sender, receiver)).thenReturn(List.of(request));
+
+        requestService.removeFromFriendList(sender, 2L);
+        assertEquals(0, sender.getFriendList().size());
+        assertEquals(0, receiver.getFriendList().size());
+        verify(userRepository, times(2)).save(any(User.class));
+        verify(requestRepository, times(1)).deleteAll(any(List.class));
+    }
+
+    @Test
+    public void testRemoveFromFriendList_NotFriends() {
+        User sender = mock(User.class);
+        List<User> friends = new ArrayList<>();
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(sender));
+        when(sender.getFriendList()).thenReturn(friends);
+        EntityNotFoundException exception
+                = assertThrows(EntityNotFoundException.class, () -> requestService.removeFromFriendList(sender, 1L));
+        String message = "Users must be friends to remove from friend list";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void testRemoveFromFriendList_SameUser() {
+        sender.setId(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(sender));
+        IllegalArgumentException exception
+                = assertThrows(IllegalArgumentException.class, () -> requestService.removeFromFriendList(sender, 1L));
+        String message = "Must provide different users";
+        assertEquals(message, exception.getMessage());
+    }
+
+
 }

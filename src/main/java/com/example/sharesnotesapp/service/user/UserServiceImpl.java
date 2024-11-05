@@ -119,34 +119,6 @@ public class UserServiceImpl implements UserService {
         return friends;
     }
 
-    @Transactional
-    @Override
-    public void removeFromFriendList(User user, Long friendId) {
-        User friend = userRepository.findById(friendId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s does not exist", friendId)));
-
-        User managedUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        Hibernate.initialize(managedUser.getFriendList());
-
-        if (user.getId().equals(friendId)) {
-            throw new IllegalArgumentException("Must provide different users");
-        }
-
-        if (!managedUser.getFriendList().contains(friend) && !friend.getFriendList().contains(managedUser)) {
-            throw new EntityNotFoundException("Users must be friends to remove from friend list");
-        }
-
-        Hibernate.initialize(friend.getFriendList());
-
-        managedUser.getFriendList().remove(friend);
-        friend.getFriendList().remove(managedUser);
-
-        userRepository.save(managedUser);
-        userRepository.save(friend);
-    }
-
     @Override
     public List<User> searchUsers(String string, Long currentUserId) {
         if (!string.isEmpty()) {

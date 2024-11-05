@@ -417,16 +417,68 @@ public class RequestControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    public void testRemoveFromFriendList() throws Exception{
-//        sender = mock(User.class);
-//        List<User> friends = new ArrayList<>();
-//        friends.add(receiver);
-//
-//        when(sender.getFriendList()).thenReturn(friends);
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        mockMvc.perform(delete("/requests/remove-friend/{friendId}", ))
-//    }
+    @Test
+    public void testRemoveFromFriendList() throws Exception {
+        Long friendId = 2L;
+        sender = mock(User.class);
+        receiver = mock(User.class);
 
+        List<User> userFriend = new ArrayList<>();
+        userFriend.add(receiver);
+        List<User> anotherUserFriend = new ArrayList<>();
+        anotherUserFriend.add(sender);
+
+        when(sender.getFriendList()).thenReturn(userFriend);
+        when(receiver.getFriendList()).thenReturn(anotherUserFriend);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/requests/remove-friend/{friendId}", friendId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testRemoveFromFriendList_UserNotLoggedIn() throws Exception {
+        Long friendId = 2L;
+        mockMvc.perform(delete("/requests/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testRemoveFromFriendList_NotFriends() throws Exception {
+        Long friendId = 2L;
+
+        doThrow(new EntityNotFoundException("Users must be friends to remove from friend list"))
+                .when(requestService).removeFromFriendList(any(User.class), any(Long.class));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/requests/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Users must be friends to remove from friend list"));
+    }
+
+    @Test
+    public void testRemoveFromFriendList_SameUser() throws Exception {
+        Long friendId = 2L;
+
+        doThrow(new IllegalArgumentException("Must provide different users"))
+                .when(requestService).removeFromFriendList(any(User.class), any(Long.class));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/requests/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Must provide different users"));
+    }
+
+    @Test
+    public void testRemoveFromFriendList_InvalidId() throws Exception {
+        Long friendId = 2L;
+
+        doThrow(new EntityNotFoundException(String.format("User with id %s does not exist", friendId)))
+                .when(requestService).removeFromFriendList(any(User.class), any(Long.class));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockMvc.perform(delete("/requests/remove-friend/{friendId}", friendId))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(String.format("User with id %s does not exist", friendId)));
+    }
 }
