@@ -303,7 +303,7 @@ export const getUserFriends = async () => {
 
 export const removeFriend = async (friendId) => {
     try {
-        const response = await api.delete(`/user/remove-friend/${friendId}`)
+        const response = await api.delete(`/requests/remove-friend/${friendId}`)
         return response.data;
     } catch (error) {
         console.error('Error response:', error);
